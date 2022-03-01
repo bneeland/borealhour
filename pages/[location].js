@@ -5,16 +5,23 @@ export default function Location(props) {
   console.log(props.data)
   return (
     <div>
+      <div><Link href="/">&larr; Back</Link></div>
       <p>Weather data for <code>{props.data.resolvedAddress}</code>.</p>
       <p><code>{props.data.description}</code></p>
       <div>
         {props.data.days.map(day => (
           <div key={day.datetime}>
-            <code>{day.datetime}</code>
+            <div>
+              <code>{day.datetime}: High: {((day.tempmax - 32) * 5/9).toFixed(1)}&nbsp;&deg;C / Low: {((day.tempmin - 32) * 5/9).toFixed(1)}&nbsp;&deg;C</code>
+            </div>
+            {day.hours.map(hour => (
+              <div key={hour.datetime}>
+                <code>{hour.datetime}: {((hour.temp - 32) * 5/9).toFixed(1)}&nbsp;&deg;C</code>
+              </div>
+            ))}
           </div>
         ))}
       </div>
-      <div><Link href="/">&larr; Home</Link></div>
     </div>
   )
 }

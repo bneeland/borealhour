@@ -5,17 +5,28 @@ export default function Home() {
   const [locationInput, setLocationInput] = useState('')
   const [autocompleteCity, setAutocompleteCity] = useState('')
   const [autocompleteCountry, setAutocompleteCountry] = useState('')
+  const [lastLocationSearch, setLastLocationSearch] = useState(0)
+
+  const minQueryLengthToSearch = 3
 
   const locationInputHandler = (e) => {
+    const now = Date.now() // Get current timestamp
     const query = e.target.value
     setLocationInput(query)
-    if (query.length >= 3) {
-      getAutocompleteData(query)
-        .then(data => {
-          console.log(data)
-          setAutocompleteCity(data.name)
-          setAutocompleteCountry(data.country)
-        })
+    if (query.length >= minQueryLengthToSearch) { // Don't bother searching for city if query is less than 3 characters
+      if ((now - lastLocationSearch) > (1000 * 0.1)) { // Don't run search more than once per X sec
+        getAutocompleteData(query)
+          .then(data => {
+            if (data) {
+              setAutocompleteCity(data.name)
+              setAutocompleteCountry(data.country)
+              setLastLocationSearch(Date.now()) // Rest the time of last location search
+            } else {
+              setAutocompleteCity('')
+              setAutocompleteCountry('')
+            }
+          })
+      }
     } else {
       setAutocompleteCity('')
       setAutocompleteCountry('')
@@ -45,7 +56,7 @@ export default function Home() {
         <input onChange={locationInputHandler} value={locationInput} type="text" id="location" name="location" />
       </div>
       <div>
-        <input readOnly value={`${autocompleteCity} (${autocompleteCountry})`} type="text" id="autocomplete" name="autocomplete" />
+        {autocompleteCity && <Link href={`/${autocompleteCity}`}><a>{`${autocompleteCity} (${autocompleteCountry})`}</a></Link>}
       </div>
     </div>
   )
