@@ -37,12 +37,22 @@ export default function Search() {
 
   return (
     <div>
-      <div>Search for location</div>
-      <div>
-        <input onChange={locationInputHandler} value={locationInput} type="text" id="location" name="location" placeholder="City, region, country, etc."/>
+      <div className="">
+        <input
+          onChange={locationInputHandler}
+          value={locationInput}
+          type="text"
+          id="location"
+          name="location"
+          placeholder="City, region, country, etc."
+        />
       </div>
       <div>
-        {autocompleteLocation && <Link href={`/${autocompleteLocation.long}`}><a>{autocompleteLocation.long}</a></Link>}
+        {autocompleteLocation && (
+          <>
+            <Link href={`/${autocompleteLocation.long}`}><a>{autocompleteLocation.long}</a></Link>
+          </>
+        )}
       </div>
     </div>
   )
