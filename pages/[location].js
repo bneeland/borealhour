@@ -22,11 +22,11 @@ export default function Location(props) {
 
       <div className="flex">
 
-        <div className="flex-none">
+        <div className="border flex-none">
           Borealdusk
         </div>
 
-        <div className="flex-1">
+        <div className="border flex-1">
           <Search />
         </div>
 

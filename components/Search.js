@@ -1,43 +1,42 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import axios from 'axios'
+import { Combobox } from '@headlessui/react'
 
 export default function Search() {
-  const [locationInput, setLocationInput] = useState('')
-  const [autocompleteLocation, setAutocompleteLocation] = useState({})
-  const [lastLocationSearch, setLastLocationSearch] = useState(0)
+  const [query, setQuery] = useState('')
+  const [autocompleteLocation, setAutocompleteLocation] = useState('')
+  const [selectedLocation, setSelectedLocation] = useState('')
 
-  const minQueryLengthToSearch = 3
-
-  const locationInputHandler = (e) => {
-    const query = e.target.value
-    setLocationInput(query)
-    if (query.length >= minQueryLengthToSearch) { // Don't bother searching for city if query is less than 3 characters
-      getAutocompleteData(query)
-        .then(data => {
-          if (data) {
-            setAutocompleteLocation({long: data.resolvedAddress})
-          } else {
-            setAutocompleteLocation({})
-          }
-        })
-    } else {
-      setAutocompleteLocation({})
-    }
-  }
-
-  const getAutocompleteData = (query) => {
+  const getAutocompleteData = (input) => {
     return axios({
       method: 'get',
-      url: `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${query}?key=${process.env.NEXT_PUBLIC_VISUAL_CROSSING_API_KEY}&contentType=json`,
+      url: `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${input}?key=${process.env.NEXT_PUBLIC_VISUAL_CROSSING_API_KEY}&contentType=json`,
     })
       .then(response => response.data)
       .catch(error => console.log(error.response.data))
   }
 
+  function locationInputHandler(e) {
+    const input = e.target.value
+
+    setQuery(input)
+
+    input.length > 3
+      ? getAutocompleteData(input).then(data => {
+        if (data) {
+          setAutocompleteLocation([data.resolvedAddress])
+        } else {
+          setAutocompleteLocation('')
+        }
+      })
+      : setAutocompleteLocation('')
+  }
+
   return (
-    <div>
-      <div className="">
+    <div className="">
+      {/*<form onSubmit={locationSubmitHandler}>
+      <div>
         <input
           onChange={locationInputHandler}
           value={locationInput}
@@ -45,15 +44,36 @@ export default function Search() {
           id="location"
           name="location"
           placeholder="City, region, country, etc."
+          autoComplete="off"
+          className="border w-full"
         />
       </div>
-      <div>
         {autocompleteLocation && (
-          <>
-            <Link href={`/${autocompleteLocation.long}`}><a>{autocompleteLocation.long}</a></Link>
-          </>
+          <div className="absolute rounded-md shadow p-2 mt-1">{autocompleteLocation}</div>
         )}
-      </div>
+      </form>*/}
+
+
+
+      <Combobox value={selectedLocation} onChange={setSelectedLocation}>
+        <Combobox.Input
+          onChange={locationInputHandler}
+          autoComplete="off"
+          className="w-full"
+        />
+        <Combobox.Options>
+          {autocompleteLocation && autocompleteLocation.map((person) => (
+            <Combobox.Option key={person} value={person}>
+              {({ active, selected }) => (
+                <li className={active && 'bg-blue-500'}>{person}</li>
+              )}
+            </Combobox.Option>
+          ))}
+        </Combobox.Options>
+      </Combobox>
+
+
+
     </div>
   )
 }
