@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import Head from 'next/head'
-import Search from '../components/search2'
+import Search from '../components/search'
 import Forecast from '../components/forecast'
 
 export default function Home() {
