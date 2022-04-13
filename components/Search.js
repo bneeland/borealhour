@@ -23,7 +23,7 @@ export default function Search(props) {
 
     setLocationQuery(input)
 
-    input.length > 3
+    input.length >= 3
       ? getAutocompleteData(input).then(data => {
         if (data) {
           setAutocompleteLocation([data.resolvedAddress])
