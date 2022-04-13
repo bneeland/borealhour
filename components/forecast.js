@@ -1,10 +1,18 @@
-function toCelcius(tempInF) {
-  return ((tempInF - 32) * 5/9).toFixed(0)
-}
+import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, } from 'recharts'
 
-function toKmph(speedInMph) {
-  return (speedInMph * 1.609344).toFixed(0)
-}
+
+
+const data = [
+  {name: 'Page A', uv: 400, pv: 1300, amt: 2400},
+  {name: 'Page A', uv: 500, pv: 2400, amt: 2300},
+  {name: 'Page A', uv: 300, pv: 2000, amt: 2500},
+  {name: 'Page A', uv: 200, pv: 2100, amt: 2700},
+  {name: 'Page A', uv: 800, pv: 1700, amt: 2100},
+  {name: 'Page A', uv: 600, pv: 2900, amt: 2300},
+]
+
+
+
 
 export default function Forecast(props) {
   const weatherData = props.weatherData
@@ -25,7 +33,7 @@ export default function Forecast(props) {
         </div>
         <div className="border flex-auto flex justify-center items-center w-80">
           <div className="text-4xl">
-            {toCelcius(weatherData.currentConditions.temp)} &deg;C
+            {weatherData.currentConditions.temp} &deg;C
           </div>
         </div>
         <div className="border flex-auto flex justify-center items-center w-60">
@@ -40,7 +48,7 @@ export default function Forecast(props) {
             <div className="border flex">
               <div className="border flex-1">Wind</div>
               <div className="border">
-                {toKmph(weatherData.currentConditions.windspeed)} km/h
+                {weatherData.currentConditions.windspeed} km/h
                 {weatherData.currentConditions.winddir && ` ${weatherData.currentConditions.winddir}°`}
               </div>
             </div>
@@ -60,12 +68,51 @@ export default function Forecast(props) {
       <div>
         <div className="border">
 
-          <div>Current day's temperatures</div>
+          <div>Current day temperatures</div>
 
           <div className="flex overflow-auto">
             {weatherData.days[0].hours.map(hour => (
-              <div>{hour.datetime}<br />
-              {toCelcius(hour.temp)} &deg;C</div>
+              <div key={hour.datetime}>
+                {hour.datetime}<br />
+                {hour.temp} &deg;C
+              </div>
+            ))}
+          </div>
+
+        </div>
+
+
+
+        <div className="border">
+
+          <div>Current day temperatures</div>
+
+          <div className="border flex overflow-auto">
+            <ResponsiveContainer width="100%" height={200}>
+              <LineChart data={weatherData.days[0].hours}>
+                <XAxis />
+                <YAxis />
+                <Tooltip />
+                <Line type="monotone" dataKey="temp" stroke="#000" />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+
+        </div>
+
+
+
+
+        <div className="border">
+
+          <div>Current day precipitation</div>
+
+          <div className="flex overflow-auto">
+            {weatherData.days[0].hours.map(hour => (
+              <div key={hour.datetime}>
+                {hour.datetime}<br />
+                {hour.precipprob}%
+              </div>
             ))}
           </div>
 
@@ -73,25 +120,14 @@ export default function Forecast(props) {
 
         <div className="border">
 
-          <div>Current day's precipitation</div>
+          <div>Current day windspeed</div>
 
           <div className="flex overflow-auto">
             {weatherData.days[0].hours.map(hour => (
-              <div>{hour.datetime}<br />
-              {hour.precipprob}%</div>
-            ))}
-          </div>
-
-        </div>
-
-        <div className="border">
-
-          <div>Current day's windspeed</div>
-
-          <div className="flex overflow-auto">
-            {weatherData.days[0].hours.map(hour => (
-              <div>{hour.datetime}<br />
-              {toKmph(hour.windspeed)} km/h</div>
+              <div key={hour.datetime}>
+                {hour.datetime}<br />
+                {hour.windspeed} km/h
+              </div>
             ))}
           </div>
 
@@ -101,7 +137,7 @@ export default function Forecast(props) {
       {/* 14 days */}
       <div className="flex overflow-auto">
         {weatherData.days.map(day => (
-          <div className="grid grid-rows-">
+          <div key={day.datetime} className="grid grid-rows-">
             <div>
               {day.datetime}
             </div>
@@ -122,7 +158,7 @@ export default function Forecast(props) {
               [Sparkline of precip] {/* day.hours.map(hour => ...) */}
             </div>
             <div>
-              {toKmph(day.windspeed)} km/h<br />
+              {day.windspeed} km/h<br />
               {day.winddir}&deg;<br />
               [Sparkline of wind] {/* day.hours.map(hour => ...) */}
             </div>
@@ -137,6 +173,17 @@ export default function Forecast(props) {
           </div>
         ))}
       </div>
+
+
+
+      <LineChart width={400} height={400} data={data}>
+        <Line type="monotone" dataKey="uv" stroke="#000" />
+      </LineChart>
+
+
+
+
+
     </>
   )
 }

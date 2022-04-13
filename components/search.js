@@ -12,7 +12,7 @@ export default function Search(props) {
   function getAutocompleteData(input) {
     return axios({
       method: 'get',
-      url: `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${input}?key=${process.env.NEXT_PUBLIC_VISUAL_CROSSING_API_KEY}&contentType=json`,
+      url: `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${input}?unitGroup=metric&key=${process.env.NEXT_PUBLIC_VISUAL_CROSSING_API_KEY}&contentType=json`,
     })
       .then(response => response.data)
       .catch(error => console.log(error.response.data))
