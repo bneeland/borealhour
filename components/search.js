@@ -41,12 +41,8 @@ export default function Search(props) {
     props.onSelectLocation(weatherData)
   }
 
-  // console.log('autocompleteData')
-  // console.log(autocompleteData)
-
-
   return (
-    <div className="w-full">
+    <div className="w-full border">
 
       <Combobox value={selectedLocation} onChange={e => locationSelectionHandler(e)}>
         <Combobox.Input

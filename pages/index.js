@@ -7,9 +7,15 @@ export default function Home() {
   const [weatherData, setWeaterData] = useState()
 
   function selectedLocationHandler(weatherData) {
+    setWeaterData(weatherData)
+
+
+
     console.log('selectedLocation through props')
     console.log(weatherData)
-    setWeaterData(weatherData)
+
+
+
   }
 
   return (
@@ -19,7 +25,7 @@ export default function Home() {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
 
-      <div className="flex space-x-2 px-2 h-12 fixed inset-x-0 top-0 bg-white z-50">
+      <div className="flex space-x-2 px-2 h-12 fixed inset-x-0 top-0 bg-white z-50 border-b">
         <div className="flex-none flex items-center">
           Borealdusk
         </div>

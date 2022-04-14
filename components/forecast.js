@@ -67,7 +67,8 @@ export default function Forecast(props) {
           <div className="flex overflow-auto">
             <ResponsiveContainer width="100%" height={150}>
               <LineChart data={weatherData.days[0].hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
-                <Line type="monotone" dataKey="temp" stroke="#000" dot={false} animationDuration="300" label={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
+                <Line type="monotone" dataKey="temp" stroke="#000" dot={false} animationDuration="500" label={{ fill: 'gray', fontSize: 13, position: 'top', offset: 10, }} />
+                <XAxis dataKey={hour => hour.datetime.slice(0, 3) + '00'} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 13, position: 'top', offset: 10, }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -75,11 +76,12 @@ export default function Forecast(props) {
 
         {/* Precipitation */}
         <div className="">
-          <div className={styles.heading.minor}>Precipication</div>
+          <div className={styles.heading.minor}>Precipitation</div>
           <div className="flex overflow-auto">
             <ResponsiveContainer width="100%" height={150}>
               <LineChart data={weatherData.days[0].hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
-                <Line type="monotone" dataKey="precipprob" stroke="#000" dot={false} animationDuration="300" label={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
+                <Line type="monotone" dataKey="precipprob" stroke="#000" dot={false} animationDuration="500" label={{ fill: 'gray', fontSize: 13, position: 'top', offset: 10, }} />
+                <XAxis dataKey={hour => hour.datetime.slice(0, 3) + '00'} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 13, position: 'top', offset: 10, }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -91,7 +93,21 @@ export default function Forecast(props) {
           <div className="flex overflow-auto">
             <ResponsiveContainer width="100%" height={150}>
               <LineChart data={weatherData.days[0].hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
-                <Line type="monotone" dataKey="windspeed" stroke="#000" dot={false} animationDuration="300" label={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
+                <Line type="monotone" dataKey="windspeed" stroke="#000" dot={false} animationDuration="500" label={{ fill: 'gray', fontSize: 13, position: 'top', offset: 10, }} />
+                <XAxis dataKey={hour => hour.datetime.slice(0, 3) + '00'} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 13, position: 'top', offset: 10, }} />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* Cloud cover */}
+        <div className="">
+          <div className={styles.heading.minor}>Cloud cover</div>
+          <div className="flex overflow-auto">
+            <ResponsiveContainer width="100%" height={150}>
+              <LineChart data={weatherData.days[0].hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
+                <Line type="monotone" dataKey="cloudcover" stroke="#000" dot={false} animationDuration="500" label={{ fill: 'gray', fontSize: 13, position: 'top', offset: 10, }} />
+                <XAxis dataKey={hour => hour.datetime.slice(0, 3) + '00'} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 13, position: 'top', offset: 10, }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -119,7 +135,7 @@ export default function Forecast(props) {
                 Low: {day.tempmin}<br />
                 <ResponsiveContainer width="100%" height={50}>
                   <LineChart data={weatherData.days[i].hours}>
-                    <Line type="monotone" dataKey="temp" stroke="#000" dot={false} animationDuration="300" />
+                    <Line type="monotone" dataKey="temp" stroke="#000" dot={false} animationDuration="500" />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
@@ -130,7 +146,7 @@ export default function Forecast(props) {
                 {day.precipcover}<br />
                 <ResponsiveContainer width="100%" height={50}>
                   <LineChart data={weatherData.days[i].hours}>
-                    <Line type="monotone" dataKey="precipprob" stroke="#000" dot={false} animationDuration="300" />
+                    <Line type="monotone" dataKey="precipprob" stroke="#000" dot={false} animationDuration="500" />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
@@ -140,7 +156,7 @@ export default function Forecast(props) {
                 {day.winddir}&deg;<br />
                 <ResponsiveContainer width="100%" height={50}>
                   <LineChart data={weatherData.days[i].hours}>
-                    <Line type="monotone" dataKey="windspeed" stroke="#000" dot={false} animationDuration="300" />
+                    <Line type="monotone" dataKey="windspeed" stroke="#000" dot={false} animationDuration="500" />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
@@ -149,18 +165,13 @@ export default function Forecast(props) {
                 {day.cloudcover}%<br />
                 <ResponsiveContainer width="100%" height={50}>
                   <LineChart data={weatherData.days[i].hours}>
-                    <Line type="monotone" dataKey="cloudcover" stroke="#000" dot={false} animationDuration="300" />
+                    <Line type="monotone" dataKey="cloudcover" stroke="#000" dot={false} animationDuration="500" />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
               <div>
                 <div className={styles.heading.minor}>Humidity</div>
-                {day.humidity}%<br />
-                <ResponsiveContainer width="100%" height={50}>
-                  <LineChart data={weatherData.days[i].hours}>
-                    <Line type="monotone" dataKey="humidity" stroke="#000" dot={false} animationDuration="300" />
-                  </LineChart>
-                </ResponsiveContainer>
+                {day.humidity}%
               </div>
             </div>
           ))}
