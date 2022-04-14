@@ -46,19 +46,22 @@ export default function Search(props) {
 
 
   return (
-    <div className="border">
+    <div className="w-full">
 
       <Combobox value={selectedLocation} onChange={e => locationSelectionHandler(e)}>
         <Combobox.Input
           onChange={locationInputHandler}
           autoComplete="off"
-          className="w-full"
+          className="w-full font-bold p-1"
+          placeholder="Search"
         />
-        <Combobox.Options>
+        <Combobox.Options
+          className="absolute py-2 shadow-md rounded"
+        >
           {autocompleteLocation && autocompleteLocation.map((person) => (
             <Combobox.Option key={person} value={person}>
               {({ active, selected }) => (
-                <li className={active ? 'bg-blue-500' : ''}>{person}</li>
+                <li className={`${active ? 'bg-blue-500' : ''} px-6 cursor-pointer`}>{person}</li>
               )}
             </Combobox.Option>
           ))}

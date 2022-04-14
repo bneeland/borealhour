@@ -18,23 +18,23 @@ export default function Home() {
         <title>Borealdusk - weather</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
-      <div className="flex">
-        <div className="flex-none">
+
+      <div className="flex space-x-2 px-2 h-12 fixed inset-x-0 top-0 bg-white z-50">
+        <div className="flex-none flex items-center">
           Borealdusk
         </div>
-        <div className="flex-1">
+        <div className="flex-1 flex items-center">
           <Search onSelectLocation={(weatherData) => selectedLocationHandler(weatherData)} />
         </div>
-        <div className="flex-none">
+        <div className="flex-none flex items-center">
           Settings
         </div>
       </div>
 
-
       {weatherData && (
-        <>
+        <div className="mt-12">
           <Forecast weatherData={weatherData} />
-        </>
+        </div>
       )}
     </div>
   )
