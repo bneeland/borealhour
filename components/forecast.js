@@ -66,8 +66,8 @@ export default function Forecast(props) {
           <div className={styles.heading.minor}>Temperature</div>
           <div className="flex overflow-auto">
             <ResponsiveContainer width="100%" height={150}>
-              <LineChart data={weatherData.days[0].hours} margin={{ top: 0, right: 0, left: -20, bottom: 0, }}>
-                <Line type="monotone" dataKey="temp" stroke="#000" dot={false} animationDuration="300" />
+              <LineChart data={weatherData.days[0].hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
+                <Line type="monotone" dataKey="temp" stroke="#000" dot={false} animationDuration="300" label={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -78,8 +78,8 @@ export default function Forecast(props) {
           <div className={styles.heading.minor}>Precipication</div>
           <div className="flex overflow-auto">
             <ResponsiveContainer width="100%" height={150}>
-              <LineChart data={weatherData.days[0].hours} margin={{ top: 0, right: 0, left: -20, bottom: 0, }}>
-                <Line type="monotone" dataKey="precipprob" stroke="#000" dot={false} animationDuration="300" />
+              <LineChart data={weatherData.days[0].hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
+                <Line type="monotone" dataKey="precipprob" stroke="#000" dot={false} animationDuration="300" label={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -90,8 +90,8 @@ export default function Forecast(props) {
           <div className={styles.heading.minor}>Wind</div>
           <div className="flex overflow-auto">
             <ResponsiveContainer width="100%" height={150}>
-              <LineChart data={weatherData.days[0].hours} margin={{ top: 0, right: 0, left: -20, bottom: 0, }}>
-                <Line type="monotone" dataKey="windspeed" stroke="#000" dot={false} animationDuration="300" />
+              <LineChart data={weatherData.days[0].hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
+                <Line type="monotone" dataKey="windspeed" stroke="#000" dot={false} animationDuration="300" label={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
