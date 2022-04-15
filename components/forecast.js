@@ -22,16 +22,14 @@ export default function Forecast(props) {
 
   return (
     <>
-      {/* Current day - summary */}
+      {/* Now */}
       <div className="p-2">
-        <div className={styles.heading.major}>Current</div>
+        <div className={styles.heading.major}>Now</div>
         <div className="flex">
-          <div className="flex-none">
-            <div className="flex justify-center items-center w-32 h-32">
-              <div className="flex flex-col items-center">
-                <div>(icon) {weatherData.currentConditions.icon}</div>
-                <div>{weatherData.currentConditions.conditions}</div>
-              </div>
+          <div className="flex-none flex items-center">
+            <div className="flex flex-col items-center">
+              <div>(icon) {weatherData.currentConditions.icon}</div>
+              <div>{weatherData.currentConditions.conditions}</div>
             </div>
           </div>
           <div className="flex-auto flex justify-center items-center w-80">
@@ -68,12 +66,28 @@ export default function Forecast(props) {
         </div>
       </div>
 
-      {/* Current day - detail */}
+      {/* Today */}
       <div className="p-2">
         <div className={styles.heading.major}>Today</div>
+        <div className="grid grid-cols-3">
+          <div>
+            <div>
+              (icon) {weatherData.days[0].icon}
+            </div>
+            <div>
+              {weatherData.days[0].conditions}
+            </div>
+            <div>
+              {weatherData.days[0].description}
+            </div>
+          </div>
+        </div>
         {/* Temperatures */}
         <div className="">
           <div className={styles.heading.minor}>Temperature</div>
+          <div>
+            {weatherData.days[0].tempmax} {weatherData.days[0].tempmin}
+          </div>
           <div className="flex overflow-auto">
             <ResponsiveContainer width="100%" height={150}>
               <LineChart data={weatherData.days[0].hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
@@ -125,7 +139,7 @@ export default function Forecast(props) {
 
       </div>
 
-      {/* 5 days (near) */}
+      {/* Days 2 to 5 */}
       <div className="p-2 overflow-auto">
         <div className={styles.heading.major}>Forecast</div>
         <div className="flex space-x-2">
@@ -135,14 +149,19 @@ export default function Forecast(props) {
                 {new Date(day.datetime).toLocaleDateString('en-US', { weekday: 'long', timeZone: 'UTC' })}
               </div>
               <div>
-                (icon) {day.icon}<br />
-                {day.conditions}
-                {day.description}
+                <div className="flex justify-center">
+                  (icon) {day.icon}
+                </div>
+                <div>
+                  {day.conditions}
+                </div>
+                <div>
+                  {day.description}
+                </div>
               </div>
               <div>
                 <div className={styles.heading.minor}>Temperatures</div>
-                High: {day.tempmax}<br />
-                Low: {day.tempmin}<br />
+                {day.tempmax} {day.tempmin}
                 <ResponsiveContainer width="100%" height={50}>
                   <LineChart data={weatherData.days[i].hours}>
                     <Line type="monotone" dataKey="temp" stroke="#000" dot={false} animationDuration="500" />
@@ -188,7 +207,7 @@ export default function Forecast(props) {
         </div>
       </div>
 
-      {/* 5 days (far) */}
+      {/* Days 6 to 14 */}
       <div className="p-2 overflow-auto">
         <div className={styles.heading.major}>Forecast</div>
         <div className="flex space-x-2">
@@ -198,29 +217,32 @@ export default function Forecast(props) {
                 {new Date(day.datetime).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC' })}
               </div>
               <div>
-                (icon) {day.icon}<br />
+              <div className="flex justify-center">
+                (icon) {day.icon}
+              </div>
+              <div>
                 {day.conditions}
+              </div>
+              <div>
                 {day.description}
+              </div>
               </div>
               <div>
                 <div className={styles.heading.minor}>Temperatures</div>
                 High: {day.tempmax}<br />
-                Low: {day.tempmin}<br />
               </div>
               <div>
                 <div className={styles.heading.minor}>Precipitation</div>
                 {day.precip}%<br />
                 {day.preciptype}<br />
-                {day.precipcover}<br />
               </div>
               <div>
                 <div className={styles.heading.minor}>Wind</div>
                 {day.windspeed} km/h<br />
-                {day.winddir}&deg;<br />
               </div>
               <div>
                 <div className={styles.heading.minor}>Cloud cover</div>
-                {day.cloudcover}%<br />
+                {day.cloudcover}%
               </div>
               <div>
                 <div className={styles.heading.minor}>Humidity</div>

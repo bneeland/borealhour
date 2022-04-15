@@ -48,7 +48,7 @@ export default function Search(props) {
         <Combobox.Input
           onChange={locationInputHandler}
           autoComplete="off"
-          className="w-full font-bold p-1"
+          className="w-full p-1"
           placeholder="Search"
         />
         <Combobox.Options
