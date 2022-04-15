@@ -7,6 +7,16 @@ const styles = {
   },
 }
 
+const weekdays = {
+  1: 'Monday',
+  2: 'Tuesday',
+  3: 'Wednesday',
+  4: 'Thursday',
+  5: 'Friday',
+  6: 'Monday',
+  7: 'Monday',
+}
+
 export default function Forecast(props) {
   const weatherData = props.weatherData
 
@@ -115,14 +125,14 @@ export default function Forecast(props) {
 
       </div>
 
-      {/* 10 days */}
+      {/* 5 days (near) */}
       <div className="p-2 overflow-auto">
         <div className={styles.heading.major}>Forecast</div>
         <div className="flex space-x-2">
-          {weatherData.days.slice(1, 11).map((day, i) => (
+          {weatherData.days.slice(1, 6).map((day, i) => (
             <div key={day.datetime} className="grid grid-rows-">
               <div>
-                [{i}] {day.datetime}
+                {new Date(day.datetime).toLocaleDateString('en-US', { weekday: 'long', timeZone: 'UTC' })}
               </div>
               <div>
                 (icon) {day.icon}<br />
@@ -168,6 +178,49 @@ export default function Forecast(props) {
                     <Line type="monotone" dataKey="cloudcover" stroke="#000" dot={false} animationDuration="500" />
                   </LineChart>
                 </ResponsiveContainer>
+              </div>
+              <div>
+                <div className={styles.heading.minor}>Humidity</div>
+                {day.humidity}%
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* 5 days (far) */}
+      <div className="p-2 overflow-auto">
+        <div className={styles.heading.major}>Forecast</div>
+        <div className="flex space-x-2">
+          {weatherData.days.slice(6, 15).map((day, i) => (
+            <div key={day.datetime} className="grid grid-rows-">
+              <div>
+                {new Date(day.datetime).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC' })}
+              </div>
+              <div>
+                (icon) {day.icon}<br />
+                {day.conditions}
+                {day.description}
+              </div>
+              <div>
+                <div className={styles.heading.minor}>Temperatures</div>
+                High: {day.tempmax}<br />
+                Low: {day.tempmin}<br />
+              </div>
+              <div>
+                <div className={styles.heading.minor}>Precipitation</div>
+                {day.precip}%<br />
+                {day.preciptype}<br />
+                {day.precipcover}<br />
+              </div>
+              <div>
+                <div className={styles.heading.minor}>Wind</div>
+                {day.windspeed} km/h<br />
+                {day.winddir}&deg;<br />
+              </div>
+              <div>
+                <div className={styles.heading.minor}>Cloud cover</div>
+                {day.cloudcover}%<br />
               </div>
               <div>
                 <div className={styles.heading.minor}>Humidity</div>
