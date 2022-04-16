@@ -4,15 +4,15 @@ import axios from 'axios'
 import { Combobox } from '@headlessui/react'
 
 export default function Search(props) {
-  // const [locationQuery, setLocationQuery] = useState('')
   const [autocompleteLocation, setAutocompleteLocation] = useState('')
   const [weatherData, setWeatherData] = useState('')
   const [selectedLocation, setSelectedLocation] = useState('')
 
   function getWeatherData(_query) {
+    console.log('API call')
     return axios({
       method: 'get',
-      url: `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${_query}?unitGroup=metric&key=${process.env.NEXT_PUBLIC_VISUAL_CROSSING_API_KEY}&contentType=json`,
+      url: `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${_query}?unitGroup=metric&key=${process.env.NEXT_PUBLIC_VISUAL_CROSSING_API_KEY_ALT}&contentType=json`,
     })
       .then(response => response.data)
       .catch(error => error.response.data)
@@ -20,8 +20,6 @@ export default function Search(props) {
 
   function locationInputHandler(e) {
     const _query = e.target.value
-
-    // setLocationQuery(_query)
 
     if (_query.length >= 3) {
       getWeatherData(_query).then(data => {
@@ -61,7 +59,8 @@ export default function Search(props) {
 
       setSelectedLocation(_selectedLocation)
     }
-  }, [props])
+
+  }, [])
 
   return (
     <div className="w-full border">

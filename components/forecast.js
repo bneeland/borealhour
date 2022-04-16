@@ -1,4 +1,5 @@
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, } from 'recharts'
+import { WiSnow, WiRain, WiFog, WiWindy, WiCloudy, WiDayCloudy, WiNightCloudy, WiDaySunny, WiNightClear, } from "react-icons/wi"
 
 const styles = {
   heading: {
@@ -17,6 +18,30 @@ const weekdays = {
   7: 'Monday',
 }
 
+const iconConfig = {
+  sizes: {
+    lg: 80,
+    md: 60,
+    sm: 40.
+  },
+  colors: {
+    black: '#000',
+    gray: '#6b7280',
+  }
+}
+
+const icons = {
+  'snow': <WiSnow size={iconConfig.sizes.sm} color={iconConfig.colors.black} />,
+  'rain': <WiRain size={iconConfig.sizes.sm} color={iconConfig.colors.black} />,
+  'fog': <WiFog size={iconConfig.sizes.sm} color={iconConfig.colors.black} />,
+  'wind': <WiWindy size={iconConfig.sizes.sm} color={iconConfig.colors.black} />,
+  'cloudy': <WiCloudy size={iconConfig.sizes.sm} color={iconConfig.colors.black} />,
+  'partly-cloudy-day': <WiDayCloudy size={iconConfig.sizes.sm} color={iconConfig.colors.black} />,
+  'partly-cloudy-night': <WiNightCloudy size={iconConfig.sizes.sm} color={iconConfig.colors.black} />,
+  'clear-day': <WiDaySunny size={iconConfig.sizes.sm} color={iconConfig.colors.black} />,
+  'clear-night': <WiNightClear size={iconConfig.sizes.sm} color={iconConfig.colors.black} />,
+}
+
 export default function Forecast(props) {
   const weatherData = props.weatherData
 
@@ -28,7 +53,8 @@ export default function Forecast(props) {
         <div className="flex">
           <div className="flex-none flex items-center">
             <div className="flex flex-col items-center">
-              <div>(icon) {weatherData.currentConditions.icon}</div>
+              <div>{icons[weatherData.currentConditions.icon]}</div>
+              <div>{weatherData.currentConditions.icon}</div>
               <div>{weatherData.currentConditions.conditions}</div>
             </div>
           </div>
@@ -72,7 +98,8 @@ export default function Forecast(props) {
         <div className="grid grid-cols-3">
           <div>
             <div>
-              (icon) {weatherData.days[0].icon}
+              {icons[weatherData.days[0].icon]}
+              {weatherData.days[0].icon}
             </div>
             <div>
               {weatherData.days[0].conditions}
@@ -150,7 +177,8 @@ export default function Forecast(props) {
               </div>
               <div>
                 <div className="flex justify-center">
-                  (icon) {day.icon}
+                  {icons[day.icon]}
+                  {day.icon}
                 </div>
                 <div>
                   {day.conditions}
@@ -218,7 +246,8 @@ export default function Forecast(props) {
               </div>
               <div>
               <div className="flex justify-center">
-                (icon) {day.icon}
+                {icons[day.icon]}
+                {day.icon}
               </div>
               <div>
                 {day.conditions}
