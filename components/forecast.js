@@ -45,6 +45,9 @@ const icons = {
 export default function Forecast(props) {
   const weatherData = props.weatherData
 
+  console.log('weatherData')
+  console.log(weatherData)
+
   return (
     <>
       {/* Now */}
@@ -131,7 +134,7 @@ export default function Forecast(props) {
           <div className="flex overflow-auto">
             <ResponsiveContainer width="100%" height={150}>
               <LineChart data={weatherData.days[0].hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
-                <Line type="monotone" dataKey="precipprob" stroke="#000" dot={false} animationDuration={500} label={{ fill: 'gray', fontSize: 13, position: 'top', offset: 10, }} />
+                <Line type="monotone" dataKey="precipprob" stroke="#000" dot={false} animationDuration={500} label={{ fill: 'gray', fontSize: 13, position: 'top', offset: 10, dataKey: hour => (hour.precipprob.toString() + (hour.preciptype ? '\n' + hour.preciptype[0] : '')) }} />
                 <XAxis dataKey={hour => hour.datetime.slice(0, 3) + '00'} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 13, position: 'top', offset: 10, }} />
               </LineChart>
             </ResponsiveContainer>
