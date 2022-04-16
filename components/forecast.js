@@ -91,7 +91,7 @@ export default function Forecast(props) {
           <div className="flex overflow-auto">
             <ResponsiveContainer width="100%" height={150}>
               <LineChart data={weatherData.days[0].hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
-                <Line type="monotone" dataKey="temp" stroke="#000" dot={false} animationDuration="500" label={{ fill: 'gray', fontSize: 13, position: 'top', offset: 10, }} />
+                <Line type="monotone" dataKey="temp" stroke="#000" dot={false} animationDuration={500} label={{ fill: 'gray', fontSize: 13, position: 'top', offset: 10, }} />
                 <XAxis dataKey={hour => hour.datetime.slice(0, 3) + '00'} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 13, position: 'top', offset: 10, }} />
               </LineChart>
             </ResponsiveContainer>
@@ -104,7 +104,7 @@ export default function Forecast(props) {
           <div className="flex overflow-auto">
             <ResponsiveContainer width="100%" height={150}>
               <LineChart data={weatherData.days[0].hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
-                <Line type="monotone" dataKey="precipprob" stroke="#000" dot={false} animationDuration="500" label={{ fill: 'gray', fontSize: 13, position: 'top', offset: 10, }} />
+                <Line type="monotone" dataKey="precipprob" stroke="#000" dot={false} animationDuration={500} label={{ fill: 'gray', fontSize: 13, position: 'top', offset: 10, }} />
                 <XAxis dataKey={hour => hour.datetime.slice(0, 3) + '00'} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 13, position: 'top', offset: 10, }} />
               </LineChart>
             </ResponsiveContainer>
@@ -117,7 +117,7 @@ export default function Forecast(props) {
           <div className="flex overflow-auto">
             <ResponsiveContainer width="100%" height={150}>
               <LineChart data={weatherData.days[0].hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
-                <Line type="monotone" dataKey="windspeed" stroke="#000" dot={false} animationDuration="500" label={{ fill: 'gray', fontSize: 13, position: 'top', offset: 10, }} />
+                <Line type="monotone" dataKey="windspeed" stroke="#000" dot={false} animationDuration={500} label={{ fill: 'gray', fontSize: 13, position: 'top', offset: 10, }} />
                 <XAxis dataKey={hour => hour.datetime.slice(0, 3) + '00'} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 13, position: 'top', offset: 10, }} />
               </LineChart>
             </ResponsiveContainer>
@@ -130,7 +130,7 @@ export default function Forecast(props) {
           <div className="flex overflow-auto">
             <ResponsiveContainer width="100%" height={150}>
               <LineChart data={weatherData.days[0].hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
-                <Line type="monotone" dataKey="cloudcover" stroke="#000" dot={false} animationDuration="500" label={{ fill: 'gray', fontSize: 13, position: 'top', offset: 10, }} />
+                <Line type="monotone" dataKey="cloudcover" stroke="#000" dot={false} animationDuration={500} label={{ fill: 'gray', fontSize: 13, position: 'top', offset: 10, }} />
                 <XAxis dataKey={hour => hour.datetime.slice(0, 3) + '00'} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 13, position: 'top', offset: 10, }} />
               </LineChart>
             </ResponsiveContainer>
@@ -164,7 +164,7 @@ export default function Forecast(props) {
                 {day.tempmax} {day.tempmin}
                 <ResponsiveContainer width="100%" height={50}>
                   <LineChart data={weatherData.days[i].hours}>
-                    <Line type="monotone" dataKey="temp" stroke="#000" dot={false} animationDuration="500" />
+                    <Line type="monotone" dataKey="temp" stroke="#000" dot={false} animationDuration={500} />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
@@ -175,7 +175,7 @@ export default function Forecast(props) {
                 {day.precipcover}<br />
                 <ResponsiveContainer width="100%" height={50}>
                   <LineChart data={weatherData.days[i].hours}>
-                    <Line type="monotone" dataKey="precipprob" stroke="#000" dot={false} animationDuration="500" />
+                    <Line type="monotone" dataKey="precipprob" stroke="#000" dot={false} animationDuration={500} />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
@@ -185,7 +185,7 @@ export default function Forecast(props) {
                 {day.winddir}&deg;<br />
                 <ResponsiveContainer width="100%" height={50}>
                   <LineChart data={weatherData.days[i].hours}>
-                    <Line type="monotone" dataKey="windspeed" stroke="#000" dot={false} animationDuration="500" />
+                    <Line type="monotone" dataKey="windspeed" stroke="#000" dot={false} animationDuration={500} />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
@@ -194,7 +194,7 @@ export default function Forecast(props) {
                 {day.cloudcover}%<br />
                 <ResponsiveContainer width="100%" height={50}>
                   <LineChart data={weatherData.days[i].hours}>
-                    <Line type="monotone" dataKey="cloudcover" stroke="#000" dot={false} animationDuration="500" />
+                    <Line type="monotone" dataKey="cloudcover" stroke="#000" dot={false} animationDuration={500} />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
@@ -229,16 +229,16 @@ export default function Forecast(props) {
               </div>
               <div>
                 <div className={styles.heading.minor}>Temperatures</div>
-                High: {day.tempmax}<br />
+                High: {day.tempmax}
               </div>
               <div>
                 <div className={styles.heading.minor}>Precipitation</div>
                 {day.precip}%<br />
-                {day.preciptype}<br />
+                {day.preciptype}
               </div>
               <div>
                 <div className={styles.heading.minor}>Wind</div>
-                {day.windspeed} km/h<br />
+                {day.windspeed} km/h
               </div>
               <div>
                 <div className={styles.heading.minor}>Cloud cover</div>

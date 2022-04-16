@@ -1,30 +1,30 @@
-import { useState } from 'react'
+import { useState, useEffect, } from 'react'
 import Link from 'next/link'
 import axios from 'axios'
 import { Combobox } from '@headlessui/react'
 
 export default function Search(props) {
-  const [locationQuery, setLocationQuery] = useState('')
+  // const [locationQuery, setLocationQuery] = useState('')
   const [autocompleteLocation, setAutocompleteLocation] = useState('')
   const [weatherData, setWeatherData] = useState('')
   const [selectedLocation, setSelectedLocation] = useState('')
 
-  function getAutocompleteData(input) {
+  function getWeatherData(_query) {
     return axios({
       method: 'get',
-      url: `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${input}?unitGroup=metric&key=${process.env.NEXT_PUBLIC_VISUAL_CROSSING_API_KEY}&contentType=json`,
+      url: `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${_query}?unitGroup=metric&key=${process.env.NEXT_PUBLIC_VISUAL_CROSSING_API_KEY}&contentType=json`,
     })
       .then(response => response.data)
-      .catch(error => console.log(error.response.data))
+      .catch(error => error.response.data)
   }
 
   function locationInputHandler(e) {
-    const input = e.target.value
+    const _query = e.target.value
 
-    setLocationQuery(input)
+    // setLocationQuery(_query)
 
-    input.length >= 3
-      ? getAutocompleteData(input).then(data => {
+    if (_query.length >= 3) {
+      getWeatherData(_query).then(data => {
         if (data) {
           setAutocompleteLocation([data.resolvedAddress])
           setWeatherData(data)
@@ -32,14 +32,36 @@ export default function Search(props) {
           setAutocompleteLocation('')
         }
       })
-      : setAutocompleteLocation('')
+    } else {
+      setAutocompleteLocation('')
+    }
   }
 
   function locationSelectionHandler(e) {
     setSelectedLocation(e)
 
     props.onSelectLocation(weatherData)
+
+    // Set selected location in local storage
+    localStorage.setItem('selectedLocation', e)
   }
+
+  // If location set in local storage, get weather data for it
+  useEffect(() => {
+    const _selectedLocation = localStorage.getItem('selectedLocation')
+
+    if (_selectedLocation) {
+      getWeatherData(_selectedLocation).then(data => {
+        if (data) {
+          setAutocompleteLocation([data.resolvedAddress])
+          setWeatherData(data)
+          props.onSelectLocation(data)
+        }
+      })
+
+      setSelectedLocation(_selectedLocation)
+    }
+  }, [props])
 
   return (
     <div className="w-full border">
@@ -52,12 +74,13 @@ export default function Search(props) {
           placeholder="Search"
         />
         <Combobox.Options
-          className="absolute py-2 shadow-md rounded"
+          className={(autocompleteLocation[0] ? '' : 'hidden') + ' ' +
+          'absolute py-2 mt-1 shadow-md rounded bg-white border z-50'}
         >
-          {autocompleteLocation && autocompleteLocation.map((person) => (
-            <Combobox.Option key={person} value={person}>
+          {autocompleteLocation && autocompleteLocation.map((location) => (
+            <Combobox.Option key={location} value={location}>
               {({ active, selected }) => (
-                <li className={`${active ? 'bg-blue-500' : ''} px-6 cursor-pointer`}>{person}</li>
+                <div className={`${active ? 'bg-blue-500 text-white' : ''} px-6 cursor-pointer`}>{location}</div>
               )}
             </Combobox.Option>
           ))}
