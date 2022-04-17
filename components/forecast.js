@@ -1,4 +1,5 @@
-import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, } from 'recharts'
+import PrecipitationLabel from './precipitationLabel'
+import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, LabelList, } from 'recharts'
 import { WiSnow, WiRain, WiFog, WiWindy, WiCloudy, WiDayCloudy, WiNightCloudy, WiDaySunny, WiNightClear, } from "react-icons/wi"
 
 const styles = {
@@ -121,8 +122,8 @@ export default function Forecast(props) {
           <div className="flex overflow-auto">
             <ResponsiveContainer width="100%" height={150}>
               <LineChart data={weatherData.days[0].hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
-                <Line type="monotone" dataKey="temp" stroke="#000" dot={false} animationDuration={500} label={{ fill: 'gray', fontSize: 13, position: 'top', offset: 10, }} />
-                <XAxis dataKey={hour => hour.datetime.slice(0, 3) + '00'} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 13, position: 'top', offset: 10, }} />
+                <Line type="monotone" dataKey="temp" stroke="#000" dot={false} animationDuration={500} label={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
+                <XAxis dataKey={hour => hour.datetime.slice(0, 3) + '00'} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -134,8 +135,10 @@ export default function Forecast(props) {
           <div className="flex overflow-auto">
             <ResponsiveContainer width="100%" height={150}>
               <LineChart data={weatherData.days[0].hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
-                <Line type="monotone" dataKey="precipprob" stroke="#000" dot={false} animationDuration={500} label={{ fill: 'gray', fontSize: 13, position: 'top', offset: 10, dataKey: hour => (hour.precipprob.toString() + (hour.preciptype ? '\n' + hour.preciptype[0] : '')) }} />
-                <XAxis dataKey={hour => hour.datetime.slice(0, 3) + '00'} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 13, position: 'top', offset: 10, }} />
+                <Line type="monotone" dataKey="precipprob" stroke="#000" dot={false} animationDuration={500}>
+                  <LabelList dataKey={hour => ({ precipProb: hour.precipprob, precipType: hour.preciptype})} content={<PrecipitationLabel />} />
+                </Line>
+                <XAxis dataKey={hour => hour.datetime.slice(0, 3) + '00'} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -147,8 +150,8 @@ export default function Forecast(props) {
           <div className="flex overflow-auto">
             <ResponsiveContainer width="100%" height={150}>
               <LineChart data={weatherData.days[0].hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
-                <Line type="monotone" dataKey="windspeed" stroke="#000" dot={false} animationDuration={500} label={{ fill: 'gray', fontSize: 13, position: 'top', offset: 10, }} />
-                <XAxis dataKey={hour => hour.datetime.slice(0, 3) + '00'} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 13, position: 'top', offset: 10, }} />
+                <Line type="monotone" dataKey="windspeed" stroke="#000" dot={false} animationDuration={500} label={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
+                <XAxis dataKey={hour => hour.datetime.slice(0, 3) + '00'} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -160,8 +163,8 @@ export default function Forecast(props) {
           <div className="flex overflow-auto">
             <ResponsiveContainer width="100%" height={150}>
               <LineChart data={weatherData.days[0].hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
-                <Line type="monotone" dataKey="cloudcover" stroke="#000" dot={false} animationDuration={500} label={{ fill: 'gray', fontSize: 13, position: 'top', offset: 10, }} />
-                <XAxis dataKey={hour => hour.datetime.slice(0, 3) + '00'} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 13, position: 'top', offset: 10, }} />
+                <Line type="monotone" dataKey="cloudcover" stroke="#000" dot={false} animationDuration={500} label={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
+                <XAxis dataKey={hour => hour.datetime.slice(0, 3) + '00'} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
