@@ -1,6 +1,6 @@
 import PrecipitationLabel from './precipitationLabel'
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, LabelList, } from 'recharts'
-import { WiSnow, WiRain, WiFog, WiWindy, WiCloudy, WiDayCloudy, WiNightCloudy, WiDaySunny, WiNightClear, } from "react-icons/wi"
+import { WiSnow, WiRain, WiFog, WiWindy, WiCloudy, WiDayCloudy, WiNightCloudy, WiDaySunny, WiNightClear, WiSleet, WiSnowflakeCold, WiRainMix, } from "react-icons/wi"
 
 const styles = {
   heading: {
@@ -23,7 +23,7 @@ const iconConfig = {
   sizes: {
     lg: 80,
     md: 60,
-    sm: 40.
+    sm: 40,
   },
   colors: {
     black: '#000',
@@ -31,7 +31,7 @@ const iconConfig = {
   }
 }
 
-const icons = {
+const conditionIcons = {
   'snow': <WiSnow size={iconConfig.sizes.sm} color={iconConfig.colors.black} />,
   'rain': <WiRain size={iconConfig.sizes.sm} color={iconConfig.colors.black} />,
   'fog': <WiFog size={iconConfig.sizes.sm} color={iconConfig.colors.black} />,
@@ -41,6 +41,14 @@ const icons = {
   'partly-cloudy-night': <WiNightCloudy size={iconConfig.sizes.sm} color={iconConfig.colors.black} />,
   'clear-day': <WiDaySunny size={iconConfig.sizes.sm} color={iconConfig.colors.black} />,
   'clear-night': <WiNightClear size={iconConfig.sizes.sm} color={iconConfig.colors.black} />,
+}
+
+const precipitationIcons = {
+  'rain': <WiRain size={iconConfig.sizes.sm} color={iconConfig.colors.black} />,
+  'snow': <WiSnow size={iconConfig.sizes.sm} color={iconConfig.colors.black} />,
+  'freezingrain': <WiSleet size={iconConfig.sizes.sm} color={iconConfig.colors.black} />,
+  'ice': <WiSnowflakeCold size={iconConfig.sizes.sm} color={iconConfig.colors.black} />,
+  'rainsnow': <WiRainMix size={iconConfig.sizes.sm} color={iconConfig.colors.black} />,
 }
 
 export default function Forecast(props) {
@@ -57,7 +65,7 @@ export default function Forecast(props) {
         <div className="flex">
           <div className="flex-none flex items-center">
             <div className="flex flex-col items-center">
-              <div>{icons[weatherData.currentConditions.icon]}</div>
+              <div>{conditionIcons[weatherData.currentConditions.icon]}</div>
               <div>{weatherData.currentConditions.icon}</div>
               <div>{weatherData.currentConditions.conditions}</div>
             </div>
@@ -102,7 +110,7 @@ export default function Forecast(props) {
         <div className="grid grid-cols-3">
           <div>
             <div>
-              {icons[weatherData.days[0].icon]}
+              {conditionIcons[weatherData.days[0].icon]}
               {weatherData.days[0].icon}
             </div>
             <div>
@@ -170,11 +178,19 @@ export default function Forecast(props) {
           </div>
         </div>
 
+        {/* Humidity */}
+        <div className="">
+          <div className={styles.heading.minor}>Humidity</div>
+          <div className="flex overflow-auto">
+            <div>{weatherData.days[0].humidity}%</div>
+          </div>
+        </div>
+
       </div>
 
       {/* Days 2 to 5 */}
       <div className="p-2 overflow-auto">
-        <div className={styles.heading.major}>Forecast</div>
+        <div className={styles.heading.major}>Forecast (2 to 5 days)</div>
         <div className="flex space-x-2">
           {weatherData.days.slice(1, 6).map((day, i) => (
             <div key={day.datetime} className="grid grid-rows-">
@@ -183,7 +199,7 @@ export default function Forecast(props) {
               </div>
               <div>
                 <div className="flex justify-center">
-                  {icons[day.icon]}
+                  {conditionIcons[day.icon]}
                   {day.icon}
                 </div>
                 <div>
@@ -243,7 +259,7 @@ export default function Forecast(props) {
 
       {/* Days 6 to 14 */}
       <div className="p-2 overflow-auto">
-        <div className={styles.heading.major}>Forecast</div>
+        <div className={styles.heading.major}>Forecast (6 to 10 days)</div>
         <div className="flex space-x-2">
           {weatherData.days.slice(6, 15).map((day, i) => (
             <div key={day.datetime} className="grid grid-rows-">
@@ -252,7 +268,7 @@ export default function Forecast(props) {
               </div>
               <div>
               <div className="flex justify-center">
-                {icons[day.icon]}
+                {conditionIcons[day.icon]}
                 {day.icon}
               </div>
               <div>

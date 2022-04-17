@@ -1,6 +1,7 @@
 import { useState, useEffect, } from 'react'
 import Link from 'next/link'
 import axios from 'axios'
+import useSWR, { mutate } from 'swr'
 import { Combobox } from '@headlessui/react'
 
 export default function Search(props) {
@@ -44,8 +45,27 @@ export default function Search(props) {
     localStorage.setItem('selectedLocation', e)
   }
 
-  // If location set in local storage, get weather data for it
-  useEffect(() => {
+  // // If location set in local storage, get weather data for it
+  // useEffect(() => {
+  //   const _selectedLocation = localStorage.getItem('selectedLocation')
+  //
+  //   if (_selectedLocation) {
+  //     getWeatherData(_selectedLocation).then(data => {
+  //       if (data) {
+  //         setAutocompleteLocation([data.resolvedAddress])
+  //         setWeatherData(data)
+  //         props.onSelectLocation(data)
+  //       }
+  //     })
+  //
+  //     setSelectedLocation(_selectedLocation)
+  //   }
+  //
+  // }, [])
+
+  function swrHandler(_message) {
+    console.log(_message)
+    
     const _selectedLocation = localStorage.getItem('selectedLocation')
 
     if (_selectedLocation) {
@@ -59,8 +79,9 @@ export default function Search(props) {
 
       setSelectedLocation(_selectedLocation)
     }
+  }
 
-  }, [])
+  useSWR('Get weather data on page load or focus', swrHandler)
 
   return (
     <div className="w-full border">
