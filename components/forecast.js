@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import PrecipitationLabel from './precipitationLabel'
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, LabelList, } from 'recharts'
 import { WiSnow, WiRain, WiFog, WiWindy, WiCloudy, WiDayCloudy, WiNightCloudy, WiDaySunny, WiNightClear, WiSleet, WiSnowflakeCold, WiRainMix, } from "react-icons/wi"
@@ -21,6 +22,8 @@ const weekdays = {
 }
 
 export default function Forecast(props) {
+  const [focusDay, setFocusDay] = useState(0)
+
   const weatherData = props.weatherData
 
   console.log('weatherData')
@@ -78,13 +81,13 @@ export default function Forecast(props) {
         <div className="grid grid-cols-3">
           <div>
             <div>
-              <Icon type={weatherData.days[0].icon} size="md" color="black" />
+              <Icon type={weatherData.days[focusDay].icon} size="md" color="black" />
             </div>
             <div>
-              {weatherData.days[0].conditions}
+              {weatherData.days[focusDay].conditions}
             </div>
             <div>
-              {weatherData.days[0].description}
+              {weatherData.days[focusDay].description}
             </div>
           </div>
         </div>
@@ -92,11 +95,11 @@ export default function Forecast(props) {
         <div className="">
           <div className={styles.heading.minor}>Temperature</div>
           <div>
-            {weatherData.days[0].tempmax} {weatherData.days[0].tempmin}
+            {weatherData.days[focusDay].tempmax} {weatherData.days[focusDay].tempmin}
           </div>
           <div className="flex overflow-auto">
             <ResponsiveContainer width="100%" height={150}>
-              <LineChart data={weatherData.days[0].hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
+              <LineChart data={weatherData.days[focusDay].hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
                 <Line type="monotone" dataKey="temp" stroke="#000" dot={false} animationDuration={500} label={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
                 <XAxis dataKey={hour => hour.datetime.slice(0, 3) + '00'} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
               </LineChart>
@@ -109,7 +112,7 @@ export default function Forecast(props) {
           <div className={styles.heading.minor}>Precipitation</div>
           <div className="flex overflow-auto">
             <ResponsiveContainer width="100%" height={150}>
-              <LineChart data={weatherData.days[0].hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
+              <LineChart data={weatherData.days[focusDay].hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
                 <Line type="monotone" dataKey="precipprob" stroke="#000" dot={false} animationDuration={500}>
                   <LabelList dataKey={hour => ({ precipProb: hour.precipprob, precipType: hour.preciptype})} content={<PrecipitationLabel />} />
                 </Line>
@@ -124,7 +127,7 @@ export default function Forecast(props) {
           <div className={styles.heading.minor}>Wind</div>
           <div className="flex overflow-auto">
             <ResponsiveContainer width="100%" height={150}>
-              <LineChart data={weatherData.days[0].hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
+              <LineChart data={weatherData.days[focusDay].hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
                 <Line type="monotone" dataKey="windspeed" stroke="#000" dot={false} animationDuration={500} label={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
                 <XAxis dataKey={hour => hour.datetime.slice(0, 3) + '00'} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
               </LineChart>
@@ -137,7 +140,7 @@ export default function Forecast(props) {
           <div className={styles.heading.minor}>Cloud cover</div>
           <div className="flex overflow-auto">
             <ResponsiveContainer width="100%" height={150}>
-              <LineChart data={weatherData.days[0].hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
+              <LineChart data={weatherData.days[focusDay].hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
                 <Line type="monotone" dataKey="cloudcover" stroke="#000" dot={false} animationDuration={500} label={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
                 <XAxis dataKey={hour => hour.datetime.slice(0, 3) + '00'} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
               </LineChart>
@@ -149,7 +152,7 @@ export default function Forecast(props) {
         <div className="">
           <div className={styles.heading.minor}>Humidity</div>
           <div className="flex overflow-auto">
-            <div>{weatherData.days[0].humidity}%</div>
+            <div>{weatherData.days[focusDay].humidity}%</div>
           </div>
         </div>
 
@@ -159,10 +162,10 @@ export default function Forecast(props) {
       <div className="p-2 overflow-auto">
         <div className={styles.heading.major}>Forecast (2 to 5 days)</div>
         <div className="flex space-x-2">
-          {weatherData.days.slice(1, 6).map((day, i) => (
-            <div key={day.datetime} className="grid grid-rows-">
+          {weatherData.days.slice(1, 5).map((day, i) => (
+            <div key={day.datetime} className="grid grid-rows-7" onClick={() => setFocusDay(i+1)}>
               <div>
-                {new Date(day.datetime).toLocaleDateString('en-US', { weekday: 'long', timeZone: 'UTC' })}
+                {i} {new Date(day.datetime).toLocaleDateString('en-US', { weekday: 'long', timeZone: 'UTC' })}
               </div>
               <div>
                 <div className="flex justify-center">
@@ -225,23 +228,23 @@ export default function Forecast(props) {
 
       {/* Days 6 to 14 */}
       <div className="p-2 overflow-auto">
-        <div className={styles.heading.major}>Forecast (6 to 10 days)</div>
+        <div className={styles.heading.major}>Forecast (6 to 14 days)</div>
         <div className="flex space-x-2">
-          {weatherData.days.slice(6, 15).map((day, i) => (
-            <div key={day.datetime} className="grid grid-rows-">
+          {weatherData.days.slice(5, 14).map((day, i) => (
+            <div key={day.datetime} className="grid grid-rows-7" onClick={() => setFocusDay(i+5)}>
               <div>
-                {new Date(day.datetime).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC' })}
+                {i} {new Date(day.datetime).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC' })}
               </div>
               <div>
-              <div className="flex justify-center">
-                <Icon type={day.icon} size="xs" color="black" />
-              </div>
-              <div>
-                {day.conditions}
-              </div>
-              <div>
-                {day.description}
-              </div>
+                <div className="flex justify-center">
+                  <Icon type={day.icon} size="xs" color="black" />
+                </div>
+                <div>
+                  {day.conditions}
+                </div>
+                <div>
+                  {day.description}
+                </div>
               </div>
               <div>
                 <div className={styles.heading.minor}>Temperatures</div>
