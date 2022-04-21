@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import PrecipitationLabel from './precipitationLabel'
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, LabelList, } from 'recharts'
 import { WiSnow, WiRain, WiFog, WiWindy, WiCloudy, WiDayCloudy, WiNightCloudy, WiDaySunny, WiNightClear, WiSleet, WiSnowflakeCold, WiRainMix, } from "react-icons/wi"
@@ -21,13 +21,11 @@ const weekdays = {
   7: 'Monday',
 }
 
-export default function Forecast(props) {
-  const [focusDay, setFocusDay] = useState(0)
-
-  const weatherData = props.weatherData
-
+export default function Forecast({ weatherData }) {
   console.log('weatherData')
   console.log(weatherData)
+
+  const [focusDay, setFocusDay] = useState(weatherData.days[0].datetime)
 
   return (
     <>
@@ -75,19 +73,19 @@ export default function Forecast(props) {
         </div>
       </div>
 
-      {/* Today */}
+      {/* Today / focus day */}
       <div className="p-2">
-        <div className={styles.heading.major}>Today</div>
+        <div className={styles.heading.major}>{new Date(weatherData.days.find(d => d.datetime === focusDay).datetime).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC' })}</div>
         <div className="grid grid-cols-3">
           <div>
             <div>
-              <Icon type={weatherData.days[focusDay].icon} size="md" color="black" />
+              <Icon type={weatherData.days.find(d => d.datetime === focusDay).icon} size="md" color="black" />
             </div>
             <div>
-              {weatherData.days[focusDay].conditions}
+              {weatherData.days.find(d => d.datetime === focusDay).conditions}
             </div>
             <div>
-              {weatherData.days[focusDay].description}
+              {weatherData.days.find(d => d.datetime === focusDay).description}
             </div>
           </div>
         </div>
@@ -95,11 +93,11 @@ export default function Forecast(props) {
         <div className="">
           <div className={styles.heading.minor}>Temperature</div>
           <div>
-            {weatherData.days[focusDay].tempmax} {weatherData.days[focusDay].tempmin}
+            {weatherData.days.find(d => d.datetime === focusDay).tempmax} {weatherData.days.find(d => d.datetime === focusDay).tempmin}
           </div>
           <div className="flex overflow-auto">
             <ResponsiveContainer width="100%" height={150}>
-              <LineChart data={weatherData.days[focusDay].hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
+              <LineChart data={weatherData.days.find(d => d.datetime === focusDay).hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
                 <Line type="monotone" dataKey="temp" stroke="#000" dot={false} animationDuration={500} label={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
                 <XAxis dataKey={hour => hour.datetime.slice(0, 3) + '00'} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
               </LineChart>
@@ -112,7 +110,7 @@ export default function Forecast(props) {
           <div className={styles.heading.minor}>Precipitation</div>
           <div className="flex overflow-auto">
             <ResponsiveContainer width="100%" height={150}>
-              <LineChart data={weatherData.days[focusDay].hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
+              <LineChart data={weatherData.days.find(d => d.datetime === focusDay).hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
                 <Line type="monotone" dataKey="precipprob" stroke="#000" dot={false} animationDuration={500}>
                   <LabelList dataKey={hour => ({ precipProb: hour.precipprob, precipType: hour.preciptype})} content={<PrecipitationLabel />} />
                 </Line>
@@ -127,7 +125,7 @@ export default function Forecast(props) {
           <div className={styles.heading.minor}>Wind</div>
           <div className="flex overflow-auto">
             <ResponsiveContainer width="100%" height={150}>
-              <LineChart data={weatherData.days[focusDay].hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
+              <LineChart data={weatherData.days.find(d => d.datetime === focusDay).hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
                 <Line type="monotone" dataKey="windspeed" stroke="#000" dot={false} animationDuration={500} label={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
                 <XAxis dataKey={hour => hour.datetime.slice(0, 3) + '00'} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
               </LineChart>
@@ -140,7 +138,7 @@ export default function Forecast(props) {
           <div className={styles.heading.minor}>Cloud cover</div>
           <div className="flex overflow-auto">
             <ResponsiveContainer width="100%" height={150}>
-              <LineChart data={weatherData.days[focusDay].hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
+              <LineChart data={weatherData.days.find(d => d.datetime === focusDay).hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
                 <Line type="monotone" dataKey="cloudcover" stroke="#000" dot={false} animationDuration={500} label={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
                 <XAxis dataKey={hour => hour.datetime.slice(0, 3) + '00'} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
               </LineChart>
@@ -152,7 +150,7 @@ export default function Forecast(props) {
         <div className="">
           <div className={styles.heading.minor}>Humidity</div>
           <div className="flex overflow-auto">
-            <div>{weatherData.days[focusDay].humidity}%</div>
+            <div>{weatherData.days.find(d => d.datetime === focusDay).humidity}%</div>
           </div>
         </div>
 
@@ -160,12 +158,12 @@ export default function Forecast(props) {
 
       {/* Days 2 to 5 */}
       <div className="p-2 overflow-auto">
-        <div className={styles.heading.major}>Forecast (2 to 5 days)</div>
+        <div className={styles.heading.major}>Forecast (short term)</div>
         <div className="flex space-x-2">
-          {weatherData.days.slice(1, 5).map((day, i) => (
-            <div key={day.datetime} className="grid grid-rows-7" onClick={() => setFocusDay(i+1)}>
+          {weatherData.days.slice(0, 5).filter(day => day !== weatherData.days.find(d => d.datetime === focusDay)).map((day, i) => (
+            <div key={day.datetime} className="grid grid-rows-7 cursor-pointer" onClick={() => setFocusDay(day.datetime)}>
               <div>
-                {i} {new Date(day.datetime).toLocaleDateString('en-US', { weekday: 'long', timeZone: 'UTC' })}
+                {new Date(day.datetime).toLocaleDateString('en-US', { weekday: 'long', timeZone: 'UTC' })}
               </div>
               <div>
                 <div className="flex justify-center">
@@ -228,12 +226,12 @@ export default function Forecast(props) {
 
       {/* Days 6 to 14 */}
       <div className="p-2 overflow-auto">
-        <div className={styles.heading.major}>Forecast (6 to 14 days)</div>
+        <div className={styles.heading.major}>Forecast (long term)</div>
         <div className="flex space-x-2">
-          {weatherData.days.slice(5, 14).map((day, i) => (
-            <div key={day.datetime} className="grid grid-rows-7" onClick={() => setFocusDay(i+5)}>
+          {weatherData.days.slice(5, 14).filter(day => day !== weatherData.days.find(d => d.datetime === focusDay)).map((day, i) => (
+            <div key={day.datetime} className="grid grid-rows-7 cursor-pointer" onClick={() => setFocusDay(day.datetime)}>
               <div>
-                {i} {new Date(day.datetime).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC' })}
+                {new Date(day.datetime).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC' })}
               </div>
               <div>
                 <div className="flex justify-center">
