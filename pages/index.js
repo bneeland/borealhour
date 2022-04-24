@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Head from 'next/head'
 import Search from '../components/search'
 import Forecast from '../components/forecast'
+import Splash from '../components/splash'
 
 export default function Home() {
   const [weatherData, setWeaterData] = useState()
@@ -11,13 +12,13 @@ export default function Home() {
   }
 
   return (
-    <div>
+    <div className="bg-zinc-50 p-4 pt-16">
       <Head>
         <title>Borealhour - weather</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
 
-      <div className="flex space-x-2 px-2 h-12 fixed inset-x-0 top-0 bg-white z-40 border-b">
+      <div className="flex space-x-4 px-4 h-14 fixed inset-x-0 top-0 z-40 bg-white/95 rounded shadow-sm m-1">
         <div className="flex-none flex items-center">
           Borealhour
         </div>
@@ -29,9 +30,13 @@ export default function Home() {
         </div>
       </div>
 
-      {weatherData && (
-        <div className="mt-12">
+      {weatherData ? (
+        <div>
           <Forecast weatherData={weatherData} />
+        </div>
+      ) : (
+        <div>
+          <Splash />
         </div>
       )}
     </div>

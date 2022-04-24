@@ -65,7 +65,7 @@ export default function Search(props) {
 
   function swrHandler(_message) {
     console.log(_message)
-    
+
     const _selectedLocation = localStorage.getItem('selectedLocation')
 
     if (_selectedLocation) {
@@ -84,18 +84,18 @@ export default function Search(props) {
   useSWR('Get weather data on page load or focus', swrHandler)
 
   return (
-    <div className="w-full border">
+    <div className="w-full">
 
       <Combobox value={selectedLocation} onChange={e => locationSelectionHandler(e)}>
         <Combobox.Input
           onChange={locationInputHandler}
           autoComplete="off"
-          className="w-full p-1"
+          className="w-full px-2 py-1 bg-zinc-50/50 focus:bg-zinc-50 shadow-inner rounded transition-all"
           placeholder="Search"
         />
         <Combobox.Options
           className={(autocompleteLocation[0] ? '' : 'hidden') + ' ' +
-          'absolute py-2 mt-1 shadow-md rounded bg-white border z-50'}
+          'absolute py-2 mt-2 border-t border-zinc-50 shadow-md rounded bg-white z-50'}
         >
           {autocompleteLocation && autocompleteLocation.map((location) => (
             <Combobox.Option key={location} value={location}>

@@ -3,13 +3,7 @@ import PrecipitationLabel from './precipitationLabel'
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, LabelList, } from 'recharts'
 import { WiSnow, WiRain, WiFog, WiWindy, WiCloudy, WiDayCloudy, WiNightCloudy, WiDaySunny, WiNightClear, WiSleet, WiSnowflakeCold, WiRainMix, } from "react-icons/wi"
 import Icon from '../components/icon'
-
-const styles = {
-  heading: {
-    major: 'uppercase text-sm font-semibold text-gray-500 my-2',
-    minor: 'uppercase text-xs font-semibold text-gray-500 my-2',
-  },
-}
+import { Heading1, Heading2 } from './headings'
 
 const weekdays = {
   1: 'Monday',
@@ -19,6 +13,14 @@ const weekdays = {
   5: 'Friday',
   6: 'Monday',
   7: 'Monday',
+}
+
+const chartColors = {
+  orange: 'rgb(234 88 12)',
+  sky: 'rgb(3 105 161)',
+  emerald: 'rgb(4 120 87)',
+  pink: 'rgb(190 24 93)',
+  zinc: 'rgb(161 161 170)',
 }
 
 function convertDate(inputDate) {
@@ -36,8 +38,8 @@ export default function Forecast({ weatherData }) {
   return (
     <>
       {/* Now */}
-      <div className="p-2">
-        <div className={styles.heading.major}>Now (as of {weatherData.currentConditions.datetime.slice(0, 3) + '00'})</div>
+      <div className="">
+        <Heading1 content={`Now (as of ${weatherData.currentConditions.datetime.slice(0, 3) + '00'})`} />
         <div className="flex">
           <div className="flex-none flex items-center">
             <div className="flex flex-col items-center">
@@ -80,8 +82,8 @@ export default function Forecast({ weatherData }) {
       </div>
 
       {/* Today / focus day */}
-      <div className="p-2">
-        <div className={styles.heading.major}>{new Date(weatherData.days.find(d => d.datetime === focusDay).datetime).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC' })}</div>
+      <div className="">
+        <Heading2 content={new Date(weatherData.days.find(d => d.datetime === focusDay).datetime).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC' })} />
         <div className="grid grid-cols-3">
           <div>
             <div>
@@ -97,14 +99,14 @@ export default function Forecast({ weatherData }) {
         </div>
         {/* Temperatures */}
         <div className="">
-          <div className={styles.heading.minor}>Temperature</div>
+          <Heading2 content="Temperature" />
           <div>
             {weatherData.days.find(d => d.datetime === focusDay).tempmax} {weatherData.days.find(d => d.datetime === focusDay).tempmin}
           </div>
           <div className="flex">
             <ResponsiveContainer width="100%" height={150}>
               <LineChart data={weatherData.days.find(d => d.datetime === focusDay).hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
-                <Line type="monotone" dataKey="temp" stroke="#000" dot={false} animationDuration={300} label={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
+                <Line type="monotone" dataKey={hour => Math.round(hour.temp)} stroke={chartColors.orange} dot={false} animationDuration={300} label={{ fill: chartColors.zinc, fontSize: 14, position: 'top', offset: 10, }} />
                 <XAxis dataKey={hour => convertDate(hour.datetime)} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
               </LineChart>
             </ResponsiveContainer>
@@ -113,12 +115,12 @@ export default function Forecast({ weatherData }) {
 
         {/* Precipitation */}
         <div className="">
-          <div className={styles.heading.minor}>Precipitation</div>
+          <Heading2 content="Precipitation" />
           <div className="flex">
             <ResponsiveContainer width="100%" height={150}>
               <LineChart data={weatherData.days.find(d => d.datetime === focusDay).hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
-                <Line type="monotone" dataKey="precipprob" stroke="#000" dot={false} animationDuration={300}>
-                  <LabelList dataKey={hour => ({ precipProb: hour.precipprob, precipType: hour.preciptype})} content={<PrecipitationLabel />} />
+                <Line type="monotone" dataKey={hour => Math.round(hour.precipprob)} stroke={chartColors.sky} dot={false} animationDuration={300}>
+                  <LabelList dataKey={hour => ({ precipProb: Math.round(hour.precipprob), precipType: hour.preciptype})} content={<PrecipitationLabel />} />
                 </Line>
                 <XAxis dataKey={hour => convertDate(hour.datetime)} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
               </LineChart>
@@ -128,11 +130,11 @@ export default function Forecast({ weatherData }) {
 
         {/* Wind speed */}
         <div className="">
-          <div className={styles.heading.minor}>Wind</div>
+          <Heading2 content="Wind" />
           <div className="flex">
             <ResponsiveContainer width="100%" height={150}>
               <LineChart data={weatherData.days.find(d => d.datetime === focusDay).hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
-                <Line type="monotone" dataKey="windspeed" stroke="#000" dot={false} animationDuration={300} label={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
+                <Line type="monotone" dataKey={hour => Math.round(hour.windspeed)} stroke={chartColors.emerald} dot={false} animationDuration={300} label={{ fill: chartColors.zinc, fontSize: 14, position: 'top', offset: 10, }} />
                 <XAxis dataKey={hour => convertDate(hour.datetime)} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
               </LineChart>
             </ResponsiveContainer>
@@ -141,11 +143,11 @@ export default function Forecast({ weatherData }) {
 
         {/* Cloud cover */}
         <div className="">
-          <div className={styles.heading.minor}>Cloud cover</div>
+          <Heading2 content="Cloud cover" />
           <div className="flex">
             <ResponsiveContainer width="100%" height={150}>
               <LineChart data={weatherData.days.find(d => d.datetime === focusDay).hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
-                <Line type="monotone" dataKey="cloudcover" stroke="#000" dot={false} animationDuration={300} label={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
+                <Line type="monotone" dataKey={hour => hour.cloudcover === '100' ? hour.cloudcover : Math.round(hour.cloudcover)} stroke={chartColors.pink} dot={false} animationDuration={300} label={{ fill: chartColors.zinc, fontSize: 14, position: 'top', offset: 10, }} />
                 <XAxis dataKey={hour => convertDate(hour.datetime)} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
               </LineChart>
             </ResponsiveContainer>
@@ -154,7 +156,7 @@ export default function Forecast({ weatherData }) {
 
         {/* Humidity */}
         <div className="">
-          <div className={styles.heading.minor}>Humidity</div>
+          <Heading2 content="Humidity" />
           <div className="flex">
             <div>{weatherData.days.find(d => d.datetime === focusDay).humidity}%</div>
           </div>
@@ -163,8 +165,8 @@ export default function Forecast({ weatherData }) {
       </div>
 
       {/* Short-term */}
-      <div className="p-2 overflow-x-auto">
-        <div className={styles.heading.major}>Forecast (short term)</div>
+      <div className="overflow-x-auto">
+        <Heading1 content="Forecast (short term)" />
         <div className="flex">
           {weatherData.days
             .slice(0, 5)
@@ -172,7 +174,7 @@ export default function Forecast({ weatherData }) {
             .map(day => (
               <div
                 key={day.datetime}
-                className={`grid grid-rows-7 cursor-pointer w-full p-4 rounded-lg transition-all duration-300 pointer ${day.datetime === focusDay && 'bg-gray-100'}`}
+                className={`grid grid-rows-7 cursor-pointer w-full p-4 rounded-lg transition-all duration-300 pointer ${day.datetime === focusDay && 'bg-white shadow-sm rounded-sm'}`}
                 onClick={() => setFocusDay(day.datetime)}
               >
                 <div>
@@ -190,46 +192,46 @@ export default function Forecast({ weatherData }) {
                   </div>
                 </div>
                 <div>
-                  <div className={styles.heading.minor}>Temperatures</div>
+                  <Heading2 content="Temperature" />
                   {day.tempmax} {day.tempmin}
                   <ResponsiveContainer width="95%" height={50} className="mx-auto">
                     <LineChart data={weatherData.days.find(d => d === day).hours}>
-                      <Line type="monotone" dataKey="temp" stroke="#000" dot={false} animationDuration={0} />
+                      <Line type="monotone" dataKey="temp" stroke={chartColors.orange} dot={false} animationDuration={0} />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
                 <div>
-                  <div className={styles.heading.minor}>Precipitation</div>
+                  <Heading2 content="Precipitation" />
                   {day.precip}%<br />
                   {day.preciptype}<br />
                   {day.precipcover}<br />
                   <ResponsiveContainer width="95%" height={50} className="mx-auto">
                     <LineChart data={weatherData.days.find(d => d === day).hours}>
-                      <Line type="monotone" dataKey="precipprob" stroke="#000" dot={false} animationDuration={0} />
+                      <Line type="monotone" dataKey="precipprob" stroke={chartColors.sky} dot={false} animationDuration={0} />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
                 <div>
-                  <div className={styles.heading.minor}>Wind</div>
+                  <Heading2 content="Wind" />
                   {day.windspeed} km/h<br />
                   {day.winddir}&deg;<br />
                   <ResponsiveContainer width="95%" height={50} className="mx-auto">
                     <LineChart data={weatherData.days.find(d => d === day).hours}>
-                      <Line type="monotone" dataKey="windspeed" stroke="#000" dot={false} animationDuration={0} />
+                      <Line type="monotone" dataKey="windspeed" stroke={chartColors.emerald} dot={false} animationDuration={0} />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
                 <div>
-                  <div className={styles.heading.minor}>Cloud cover</div>
+                  <Heading2 content="Cloud cover" />
                   {day.cloudcover}%<br />
                   <ResponsiveContainer width="95%" height={50} className="mx-auto">
                     <LineChart data={weatherData.days.find(d => d === day).hours}>
-                      <Line type="monotone" dataKey="cloudcover" stroke="#000" dot={false} animationDuration={0} />
+                      <Line type="monotone" dataKey="cloudcover" stroke={chartColors.pink} dot={false} animationDuration={0} />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
                 <div>
-                  <div className={styles.heading.minor}>Humidity</div>
+                  <Heading2 content="Humidity" />
                   {day.humidity}%
                 </div>
               </div>
@@ -239,8 +241,8 @@ export default function Forecast({ weatherData }) {
       </div>
 
       {/* Long-term */}
-      <div className="p-2 overflow-x-auto">
-        <div className={styles.heading.major}>Forecast (long term)</div>
+      <div className="overflow-x-auto">
+        <Heading1 content="Forecast (long term)" />
         <div className="flex">
           {weatherData.days
             .slice(5, 14)
@@ -248,7 +250,7 @@ export default function Forecast({ weatherData }) {
             .map((day, i) => (
               <div
                 key={day.datetime}
-                className={`grid grid-rows-7 cursor-pointer w-full p-4 rounded-lg transition-all duration-300 ${day.datetime === focusDay && 'bg-gray-100'}`}
+                className={`grid grid-rows-7 cursor-pointer w-full p-4 rounded-lg transition-all duration-300 ${day.datetime === focusDay && 'bg-white shadow-sm rounded-sm'}`}
                 onClick={() => setFocusDay(day.datetime)}
               >
                 <div>
@@ -266,24 +268,24 @@ export default function Forecast({ weatherData }) {
                   </div>
                 </div>
                 <div>
-                  <div className={styles.heading.minor}>Temperatures</div>
+                  <Heading2 content="Temperatures" />
                   High: {day.tempmax}
                 </div>
                 <div>
-                  <div className={styles.heading.minor}>Precipitation</div>
+                  <Heading2 content="Precipitation" />
                   {day.precip}%<br />
                   {day.preciptype}
                 </div>
                 <div>
-                  <div className={styles.heading.minor}>Wind</div>
+                  <Heading2 content="Wind" />
                   {day.windspeed} km/h
                 </div>
                 <div>
-                  <div className={styles.heading.minor}>Cloud cover</div>
+                  <Heading2 content="Cloud cover" />
                   {day.cloudcover}%
                 </div>
                 <div>
-                  <div className={styles.heading.minor}>Humidity</div>
+                  <Heading2 content="Humidity" />
                   {day.humidity}%
                 </div>
               </div>
