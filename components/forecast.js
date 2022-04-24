@@ -21,6 +21,12 @@ const weekdays = {
   7: 'Monday',
 }
 
+function convertDate(inputDate) {
+  const inputDateFull = new Date('1970-01-01T' + inputDate + 'Z').toLocaleTimeString([], { timeZone: 'UTC', })
+  const outputDate = inputDateFull.slice(0, -9) + ' ' + inputDateFull.slice(-2, ).toLowerCase()
+  return outputDate
+}
+
 export default function Forecast({ weatherData }) {
   console.log('weatherData')
   console.log(weatherData)
@@ -99,7 +105,7 @@ export default function Forecast({ weatherData }) {
             <ResponsiveContainer width="100%" height={150}>
               <LineChart data={weatherData.days.find(d => d.datetime === focusDay).hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
                 <Line type="monotone" dataKey="temp" stroke="#000" dot={false} animationDuration={500} label={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
-                <XAxis dataKey={hour => hour.datetime.slice(0, 3) + '00'} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
+                <XAxis dataKey={hour => convertDate(hour.datetime)} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -114,7 +120,7 @@ export default function Forecast({ weatherData }) {
                 <Line type="monotone" dataKey="precipprob" stroke="#000" dot={false} animationDuration={500}>
                   <LabelList dataKey={hour => ({ precipProb: hour.precipprob, precipType: hour.preciptype})} content={<PrecipitationLabel />} />
                 </Line>
-                <XAxis dataKey={hour => hour.datetime.slice(0, 3) + '00'} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
+                <XAxis dataKey={hour => convertDate(hour.datetime)} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -127,7 +133,7 @@ export default function Forecast({ weatherData }) {
             <ResponsiveContainer width="100%" height={150}>
               <LineChart data={weatherData.days.find(d => d.datetime === focusDay).hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
                 <Line type="monotone" dataKey="windspeed" stroke="#000" dot={false} animationDuration={500} label={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
-                <XAxis dataKey={hour => hour.datetime.slice(0, 3) + '00'} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
+                <XAxis dataKey={hour => convertDate(hour.datetime)} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -140,7 +146,7 @@ export default function Forecast({ weatherData }) {
             <ResponsiveContainer width="100%" height={150}>
               <LineChart data={weatherData.days.find(d => d.datetime === focusDay).hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
                 <Line type="monotone" dataKey="cloudcover" stroke="#000" dot={false} animationDuration={500} label={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
-                <XAxis dataKey={hour => hour.datetime.slice(0, 3) + '00'} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
+                <XAxis dataKey={hour => convertDate(hour.datetime)} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
