@@ -166,67 +166,73 @@ export default function Forecast({ weatherData }) {
       <div className="p-2 overflow-auto">
         <div className={styles.heading.major}>Forecast (short term)</div>
         <div className="flex space-x-2">
-          {weatherData.days.slice(0, 5).filter(day => day !== weatherData.days.find(d => d.datetime === focusDay)).map((day, i) => (
-            <div key={day.datetime} className="grid grid-rows-7 cursor-pointer" onClick={() => setFocusDay(day.datetime)}>
-              <div>
-                {new Date(day.datetime).toLocaleDateString('en-US', { weekday: 'long', timeZone: 'UTC' })}
-              </div>
-              <div>
-                <div className="flex justify-center">
-                  <Icon type={day.icon} size="sm" color="black" />
+          {weatherData.days
+            .slice(0, 5)
+            .filter(day => day !== weatherData.days
+              .find(d => d.datetime === focusDay)
+            )
+            .map(day => (
+              <div key={day.datetime} className="grid grid-rows-7 cursor-pointer" onClick={() => setFocusDay(day.datetime)}>
+                <div>
+                  {new Date(day.datetime).toLocaleDateString('en-US', { weekday: 'long', timeZone: 'UTC' })}
                 </div>
                 <div>
-                  {day.conditions}
+                  <div className="flex justify-center">
+                    <Icon type={day.icon} size="sm" color="black" />
+                  </div>
+                  <div>
+                    {day.conditions}
+                  </div>
+                  <div>
+                    {day.description}
+                  </div>
                 </div>
                 <div>
-                  {day.description}
+                  <div className={styles.heading.minor}>Temperatures</div>
+                  {day.tempmax} {day.tempmin}
+                  <ResponsiveContainer width="100%" height={50}>
+                    <LineChart data={weatherData.days.find(d => d === day).hours}>
+                      <Line type="monotone" dataKey="temp" stroke="#000" dot={false} animationDuration={500} />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+                <div>
+                  <div className={styles.heading.minor}>Precipitation</div>
+                  {day.precip}%<br />
+                  {day.preciptype}<br />
+                  {day.precipcover}<br />
+                  <ResponsiveContainer width="100%" height={50}>
+                    <LineChart data={weatherData.days.find(d => d === day).hours}>
+                      <Line type="monotone" dataKey="precipprob" stroke="#000" dot={false} animationDuration={500} />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+                <div>
+                  <div className={styles.heading.minor}>Wind</div>
+                  {day.windspeed} km/h<br />
+                  {day.winddir}&deg;<br />
+                  <ResponsiveContainer width="100%" height={50}>
+                    <LineChart data={weatherData.days.find(d => d === day).hours}>
+                      <Line type="monotone" dataKey="windspeed" stroke="#000" dot={false} animationDuration={500} />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+                <div>
+                  <div className={styles.heading.minor}>Cloud cover</div>
+                  {day.cloudcover}%<br />
+                  <ResponsiveContainer width="100%" height={50}>
+                    <LineChart data={weatherData.days.find(d => d === day).hours}>
+                      <Line type="monotone" dataKey="cloudcover" stroke="#000" dot={false} animationDuration={500} />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+                <div>
+                  <div className={styles.heading.minor}>Humidity</div>
+                  {day.humidity}%
                 </div>
               </div>
-              <div>
-                <div className={styles.heading.minor}>Temperatures</div>
-                {day.tempmax} {day.tempmin}
-                <ResponsiveContainer width="100%" height={50}>
-                  <LineChart data={weatherData.days[i].hours}>
-                    <Line type="monotone" dataKey="temp" stroke="#000" dot={false} animationDuration={500} />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-              <div>
-                <div className={styles.heading.minor}>Precipitation</div>
-                {day.precip}%<br />
-                {day.preciptype}<br />
-                {day.precipcover}<br />
-                <ResponsiveContainer width="100%" height={50}>
-                  <LineChart data={weatherData.days[i].hours}>
-                    <Line type="monotone" dataKey="precipprob" stroke="#000" dot={false} animationDuration={500} />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-              <div>
-                <div className={styles.heading.minor}>Wind</div>
-                {day.windspeed} km/h<br />
-                {day.winddir}&deg;<br />
-                <ResponsiveContainer width="100%" height={50}>
-                  <LineChart data={weatherData.days[i].hours}>
-                    <Line type="monotone" dataKey="windspeed" stroke="#000" dot={false} animationDuration={500} />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-              <div>
-                <div className={styles.heading.minor}>Cloud cover</div>
-                {day.cloudcover}%<br />
-                <ResponsiveContainer width="100%" height={50}>
-                  <LineChart data={weatherData.days[i].hours}>
-                    <Line type="monotone" dataKey="cloudcover" stroke="#000" dot={false} animationDuration={500} />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-              <div>
-                <div className={styles.heading.minor}>Humidity</div>
-                {day.humidity}%
-              </div>
-            </div>
-          ))}
+            ))
+          }
         </div>
       </div>
 
