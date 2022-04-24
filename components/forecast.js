@@ -172,7 +172,7 @@ export default function Forecast({ weatherData }) {
             .map(day => (
               <div
                 key={day.datetime}
-                className={`grid grid-rows-7 cursor-pointer w-full p-4 rounded-lg transition-all duration-300 ${day.datetime === focusDay && 'bg-gray-100'}`}
+                className={`grid grid-rows-7 cursor-pointer w-full p-4 rounded-lg transition-all duration-300 pointer ${day.datetime === focusDay && 'bg-gray-100'}`}
                 onClick={() => setFocusDay(day.datetime)}
               >
                 <div>
@@ -192,9 +192,9 @@ export default function Forecast({ weatherData }) {
                 <div>
                   <div className={styles.heading.minor}>Temperatures</div>
                   {day.tempmax} {day.tempmin}
-                  <ResponsiveContainer width="90%" height={50} className="mx-auto">
+                  <ResponsiveContainer width="95%" height={50} className="mx-auto">
                     <LineChart data={weatherData.days.find(d => d === day).hours}>
-                      <Line type="monotone" dataKey="temp" stroke="#000" dot={false} animationDuration={300} />
+                      <Line type="monotone" dataKey="temp" stroke="#000" dot={false} animationDuration={0} />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
@@ -203,9 +203,9 @@ export default function Forecast({ weatherData }) {
                   {day.precip}%<br />
                   {day.preciptype}<br />
                   {day.precipcover}<br />
-                  <ResponsiveContainer width="90%" height={50} className="mx-auto">
+                  <ResponsiveContainer width="95%" height={50} className="mx-auto">
                     <LineChart data={weatherData.days.find(d => d === day).hours}>
-                      <Line type="monotone" dataKey="precipprob" stroke="#000" dot={false} animationDuration={300} />
+                      <Line type="monotone" dataKey="precipprob" stroke="#000" dot={false} animationDuration={0} />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
@@ -213,18 +213,18 @@ export default function Forecast({ weatherData }) {
                   <div className={styles.heading.minor}>Wind</div>
                   {day.windspeed} km/h<br />
                   {day.winddir}&deg;<br />
-                  <ResponsiveContainer width="90%" height={50} className="mx-auto">
+                  <ResponsiveContainer width="95%" height={50} className="mx-auto">
                     <LineChart data={weatherData.days.find(d => d === day).hours}>
-                      <Line type="monotone" dataKey="windspeed" stroke="#000" dot={false} animationDuration={300} />
+                      <Line type="monotone" dataKey="windspeed" stroke="#000" dot={false} animationDuration={0} />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
                 <div>
                   <div className={styles.heading.minor}>Cloud cover</div>
                   {day.cloudcover}%<br />
-                  <ResponsiveContainer width="90%" height={50} className="mx-auto">
+                  <ResponsiveContainer width="95%" height={50} className="mx-auto">
                     <LineChart data={weatherData.days.find(d => d === day).hours}>
-                      <Line type="monotone" dataKey="cloudcover" stroke="#000" dot={false} animationDuration={300} />
+                      <Line type="monotone" dataKey="cloudcover" stroke="#000" dot={false} animationDuration={0} />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
