@@ -12,13 +12,13 @@ export default function Home() {
   }
 
   return (
-    <div className="bg-zinc-50 p-4 pt-16">
+    <div className="bg-zinc-50 pt-16">
       <Head>
         <title>Borealhour - weather</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
 
-      <div className="flex space-x-4 px-4 h-14 fixed inset-x-0 top-0 z-40 bg-white/95 rounded shadow-sm m-1">
+      <div className="flex space-x-4 px-4 h-14 m-2 fixed inset-x-0 top-0 z-40 bg-white rounded shadow-sm">
         <div className="flex-none flex items-center">
           Borealhour
         </div>
