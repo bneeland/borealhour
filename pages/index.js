@@ -12,7 +12,7 @@ export default function Home() {
   }
 
   return (
-    <div className="bg-zinc-50 pt-16">
+    <div className="bg-zinc-100 pt-16">
       <Head>
         <title>Borealhour - weather</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />

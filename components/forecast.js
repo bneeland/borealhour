@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react'
 import PrecipitationLabel from './precipitationLabel'
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, LabelList, } from 'recharts'
 import { WiSnow, WiRain, WiFog, WiWindy, WiCloudy, WiDayCloudy, WiNightCloudy, WiDaySunny, WiNightClear, WiSleet, WiSnowflakeCold, WiRainMix, } from "react-icons/wi"
-import Icon from '../components/icon'
+import WeatherIcon from '../components/weatherIcon'
+import { HiChevronLeft, HiChevronRight, } from "react-icons/hi"
 import { MajorHeading, MinorHeading, DataLabel, DataValue, DataArray, } from './typography'
 
 const weekdays = {
@@ -43,7 +44,7 @@ export default function Forecast({ weatherData }) {
         <div className="flex">
           <div className="flex-none flex items-center">
             <div className="flex flex-col items-center">
-              <div><Icon type={weatherData.currentConditions.icon} size="xl" color="black" /></div>
+              <div><WeatherIcon type={weatherData.currentConditions.icon} size="xl" color="black" /></div>
               <DataValue content={weatherData.currentConditions.conditions} />
             </div>
           </div>
@@ -96,11 +97,31 @@ export default function Forecast({ weatherData }) {
       </div>
 
       {/* Today or focus day */}
-      <div className="p-4">
-        <MajorHeading content={new Date(weatherData.days.find(d => d.datetime === focusDay).datetime).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC' })} />
+      <div className="p-4 m-4 rounded-2xl bg-white shadow-sm">
+        <div className="flex items-center">
+          <div className="w-28">
+            <MajorHeading content={new Date(weatherData.days.find(d => d.datetime === focusDay).datetime).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC' })} />
+          </div>
+          <div className="flex items-center space-x-4">
+          <button
+            className="cursor-pointer disabled:cursor-default shadow-sm rounded-sm text-zinc-500 disabled:text-zinc-300 transition-all"
+            disabled={focusDay === new Date().toLocaleString('sv').split(' ')[0]}
+            onClick={() => setFocusDay(new Date(new Date().setTime(new Date(focusDay).getTime() - (1000*60*60*24))).toISOString().split('T')[0])}
+          >
+            <HiChevronLeft size={20} />
+          </button>
+          <button
+            className="cursor-pointer disabled:cursor-default shadow-sm rounded-sm text-zinc-500 disabled:text-zinc-300 transition-all"
+            disabled={focusDay === new Date(new Date().setTime(new Date(new Date().toLocaleString('sv').split(' ')[0]).getTime() + (1000*60*60*24*13))).toISOString().split('T')[0]}
+            onClick={() => setFocusDay(new Date(new Date().setTime(new Date(focusDay).getTime() + (1000*60*60*24))).toISOString().split('T')[0])}
+          >
+            <HiChevronRight size={20} />
+          </button>
+          </div>
+        </div>
         <div className="flex space-x-2">
           <div className="flex items-center">
-            <Icon type={weatherData.days.find(d => d.datetime === focusDay).icon} size="md" color="black" />
+            <WeatherIcon type={weatherData.days.find(d => d.datetime === focusDay).icon} size="md" color="black" />
           </div>
           <div className="flex items-center">
             <div>
@@ -201,7 +222,7 @@ export default function Forecast({ weatherData }) {
                 </div>
                 <div>
                   <div className="flex justify-center">
-                    <Icon type={day.icon} size="sm" color="black" />
+                    <WeatherIcon type={day.icon} size="sm" color="black" />
                   </div>
                   <div>
                     <DataValue content={day.conditions} />
@@ -289,7 +310,7 @@ export default function Forecast({ weatherData }) {
                 </div>
                 <div>
                   <div className="flex justify-center">
-                    <Icon type={day.icon} size="xs" color="black" />
+                    <WeatherIcon type={day.icon} size="xs" color="black" />
                   </div>
                   <div>
                     <DataValue content={day.conditions} />

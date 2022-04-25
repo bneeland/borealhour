@@ -8,6 +8,7 @@
 html {
   font-family: 'Inter', sans-serif;
   font-weight: 300;
+  background: rgb(244 244 245);
 }
 
 div.pointer svg.recharts-surface {

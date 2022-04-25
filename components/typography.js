@@ -1,6 +1,6 @@
 export function MajorHeading(props) {
   return (
-    <div className="text-sm text-gray-500 uppercase my-4">
+    <div className="text-sm text-zinc-500 uppercase my-4">
       {props.content}
     </div>
   )
@@ -8,7 +8,7 @@ export function MajorHeading(props) {
 
 export function MinorHeading(props) {
   return (
-    <div className="text-xs text-gray-500 uppercase my-4">
+    <div className="text-xs text-zinc-500 uppercase my-4">
       {props.content}
     </div>
   )

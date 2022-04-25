@@ -14,7 +14,7 @@ const iconConfig = {
   }
 }
 
-export default function Icon(props) {
+export default function WeatherIcon(props) {
   const icons = {
     'snow': <WiSnow size={iconConfig.sizes[props.size]} color={iconConfig.colors[props.color]} />,
     'rain': <WiRain size={iconConfig.sizes[props.size]} color={iconConfig.colors[props.color]} />,
