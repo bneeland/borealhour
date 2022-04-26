@@ -10,10 +10,9 @@ export default function Search({ units, onSelectLocation }) {
   const [selectedLocation, setSelectedLocation] = useState('')
 
   function getWeatherData(_query) {
-    console.log('API call')
     return axios({
       method: 'get',
-      url: `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${_query}?unitGroup=${units}&key=${process.env.NEXT_PUBLIC_VISUAL_CROSSING_API_KEY_ALT}&contentType=json`,
+      url: `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${_query}?unitGroup=${units}&key=${process.env.NEXT_PUBLIC_VISUAL_CROSSING_API_KEY}&contentType=json`,
     })
       .then(response => response.data)
       .catch(error => error.response.data)
@@ -50,8 +49,6 @@ export default function Search({ units, onSelectLocation }) {
   }
 
   function swrHandler(_message) {
-    console.log(_message)
-
     const _selectedLocation = localStorage.getItem('selectedLocation')
 
     if (_selectedLocation) {
@@ -84,7 +81,7 @@ export default function Search({ units, onSelectLocation }) {
           'absolute py-2 mt-2 shadow-md border border-stone-100 rounded bg-white z-50'}
         >
           {autocompleteLocation && autocompleteLocation.map((location) => (
-            <Combobox.Option key={location} value={location}>
+            <Combobox.Option key={Math.random()} value={location}>
               {({ active, selected }) => (
                 <div className={`${active ? 'bg-blue-500 text-white' : ''} px-6 cursor-pointer`}>{location}</div>
               )}

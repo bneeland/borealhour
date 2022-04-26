@@ -37,14 +37,11 @@ const unitSymbols = {
 
 function convertTime(inputDate) {
   const inputDateFull = new Date('1970-01-01T' + inputDate + 'Z').toLocaleTimeString([], { timeZone: 'UTC', })
-  const outputDate = inputDateFull.slice(0, -9) + ' ' + inputDateFull.slice(-2, ).toLowerCase()
+  const outputDate = inputDateFull.slice(0, -6) + ' ' + inputDateFull.slice(-2, ).toLowerCase()
   return outputDate
 }
 
 export default function Forecast({ weatherData, units, focusDay, setFocusDay }) {
-  console.log('weatherData')
-  console.log(weatherData)
-
   return (
     <>
       {/* Now */}
@@ -52,19 +49,19 @@ export default function Forecast({ weatherData, units, focusDay, setFocusDay }) 
         <div className="flex space-x-2">
           <MajorHeading content="Current" /><DataLabel content={`(as of ${convertTime(weatherData.currentConditions.datetime)})`} />
         </div>
-        <div className="flex">
-          <div className="flex-none flex items-center">
+        <div className="flex flex-col sm:flex-row space-y-2 sm:space-x-2">
+          <div className="flex-1 sm:flex-none flex items-center justify-center">
             <div className="flex flex-col items-center">
               <div><WeatherIcon type={weatherData.currentConditions.icon} size="lg" color="black" /></div>
               <DataValue content={weatherData.currentConditions.conditions} />
             </div>
           </div>
-          <div className="flex-auto flex justify-center items-center w-80">
-            <div className="text-4xl">
+          <div className="flex-auto flex justify-center items-center sm:w-40 lg:w-80">
+            <div className="text-5xl">
               <DataValue content={`${Math.round(weatherData.currentConditions.temp)} ${unitSymbols.temperature[units]}`} />
             </div>
           </div>
-          <div className="flex-auto flex justify-center items-center w-60">
+          <div className="flex-auto flex justify-center items-center sm:w-40 lg:w-20">
             <div className="w-full">
               <div className="flex">
                 <div className="flex-1">
