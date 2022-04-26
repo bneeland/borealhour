@@ -72,12 +72,12 @@ export default function Search(props) {
         <Combobox.Input
           onChange={locationInputHandler}
           autoComplete="off"
-          className="w-full px-2 py-1 bg-zinc-100 shadow-inner rounded transition-all font-light"
+          className="w-full px-2 py-1 bg-zinc-100 shadow-inner border border-zinc-100 rounded transition-all font-light"
           placeholder="Search for a location"
         />
         <Combobox.Options
           className={(autocompleteLocation[0] ? '' : 'hidden') + ' ' +
-          'absolute py-2 mt-2 border-t border-zinc-50 shadow-md rounded bg-white z-50'}
+          'absolute py-2 mt-2 shadow-md border border-zinc-100  rounded bg-white z-50'}
         >
           {autocompleteLocation && autocompleteLocation.map((location) => (
             <Combobox.Option key={location} value={location}>

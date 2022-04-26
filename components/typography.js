@@ -1,6 +1,6 @@
 export function MajorHeading(props) {
   return (
-    <div className="text-sm text-zinc-500 uppercase my-4">
+    <div className="text-sm text-zinc-500 uppercase mb-4">
       {props.content}
     </div>
   )
@@ -34,7 +34,7 @@ export function DataArray(props) {
   return (
     <span className="font-space-mono">
       {props.content && props.content.map((item, i) => (
-        <>{item}{i !== props.content.length-1 && ', '}</>
+        <span key={item}>{item}{i !== props.content.length-1 && ', '}</span>
       ))}
     </span>
   )
