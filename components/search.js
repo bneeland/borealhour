@@ -4,7 +4,7 @@ import axios from 'axios'
 import useSWR, { mutate } from 'swr'
 import { Combobox } from '@headlessui/react'
 
-export default function Search(props) {
+export default function Search({ units, onSelectLocation }) {
   const [autocompleteLocation, setAutocompleteLocation] = useState('')
   const [weatherData, setWeatherData] = useState('')
   const [selectedLocation, setSelectedLocation] = useState('')
@@ -13,11 +13,15 @@ export default function Search(props) {
     console.log('API call')
     return axios({
       method: 'get',
-      url: `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${_query}?unitGroup=metric&key=${process.env.NEXT_PUBLIC_VISUAL_CROSSING_API_KEY_ALT}&contentType=json`,
+      url: `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${_query}?unitGroup=${units}&key=${process.env.NEXT_PUBLIC_VISUAL_CROSSING_API_KEY_ALT}&contentType=json`,
     })
       .then(response => response.data)
       .catch(error => error.response.data)
   }
+
+  useEffect(() => {
+    swrHandler()
+  }, [units])
 
   function locationInputHandler(e) {
     const _query = e.target.value
@@ -39,7 +43,7 @@ export default function Search(props) {
   function locationSelectionHandler(e) {
     setSelectedLocation(e)
 
-    props.onSelectLocation(weatherData)
+    onSelectLocation(weatherData)
 
     // Set selected location in local storage
     localStorage.setItem('selectedLocation', e)
@@ -55,7 +59,7 @@ export default function Search(props) {
         if (data) {
           setAutocompleteLocation([data.resolvedAddress])
           setWeatherData(data)
-          props.onSelectLocation(data)
+          onSelectLocation(data)
         }
       })
 
@@ -72,12 +76,12 @@ export default function Search(props) {
         <Combobox.Input
           onChange={locationInputHandler}
           autoComplete="off"
-          className="w-full px-2 py-1 bg-zinc-100 shadow-inner border border-zinc-100 rounded transition-all font-light"
+          className="w-full px-2 py-1 bg-stone-100 shadow-inner border border-stone-100 rounded transition-all font-light"
           placeholder="Search for a location"
         />
         <Combobox.Options
           className={(autocompleteLocation[0] ? '' : 'hidden') + ' ' +
-          'absolute py-2 mt-2 shadow-md border border-zinc-100  rounded bg-white z-50'}
+          'absolute py-2 mt-2 shadow-md border border-stone-100 rounded bg-white z-50'}
         >
           {autocompleteLocation && autocompleteLocation.map((location) => (
             <Combobox.Option key={location} value={location}>

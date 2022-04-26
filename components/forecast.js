@@ -3,7 +3,7 @@ import PrecipitationLabel from './precipitationLabel'
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, LabelList, } from 'recharts'
 import { WiSnow, WiRain, WiFog, WiWindy, WiCloudy, WiDayCloudy, WiNightCloudy, WiDaySunny, WiNightClear, WiSleet, WiSnowflakeCold, WiRainMix, } from "react-icons/wi"
 import WeatherIcon from '../components/weatherIcon'
-import { HiChevronLeft, HiChevronRight, } from "react-icons/hi"
+import { HiChevronLeft, HiChevronRight, } from 'react-icons/hi'
 import { MajorHeading, MinorHeading, DataLabel, DataValue, DataArray, } from './typography'
 
 const weekdays = {
@@ -18,10 +18,21 @@ const weekdays = {
 
 const chartColors = {
   orange: 'rgb(234 88 12)',
-  sky: 'rgb(3 105 161)',
+  sky: 'rgb(2 132 199)',
   emerald: 'rgb(4 120 87)',
   pink: 'rgb(190 24 93)',
-  zinc: 'rgb(161 161 170)',
+  stone: 'rgb(161 161 170)',
+}
+
+const unitSymbols = {
+  temperature: {
+    metric: '°C',
+    us: '°F',
+  },
+  speed: {
+    metric: 'km/h',
+    us: 'MPH',
+  }
 }
 
 function convertTime(inputDate) {
@@ -30,7 +41,7 @@ function convertTime(inputDate) {
   return outputDate
 }
 
-export default function Forecast({ weatherData, focusDay, setFocusDay }) {
+export default function Forecast({ weatherData, units, focusDay, setFocusDay }) {
   console.log('weatherData')
   console.log(weatherData)
 
@@ -38,7 +49,9 @@ export default function Forecast({ weatherData, focusDay, setFocusDay }) {
     <>
       {/* Now */}
       <div className="p-8">
-        <MajorHeading content={`Now (as of ${convertTime(weatherData.currentConditions.datetime)})`} />
+        <div className="flex space-x-2">
+          <MajorHeading content="Current" /><DataLabel content={`(as of ${convertTime(weatherData.currentConditions.datetime)})`} />
+        </div>
         <div className="flex">
           <div className="flex-none flex items-center">
             <div className="flex flex-col items-center">
@@ -48,7 +61,7 @@ export default function Forecast({ weatherData, focusDay, setFocusDay }) {
           </div>
           <div className="flex-auto flex justify-center items-center w-80">
             <div className="text-4xl">
-              <DataValue content={`${weatherData.currentConditions.temp} °C`} />
+              <DataValue content={`${Math.round(weatherData.currentConditions.temp)} ${unitSymbols.temperature[units]}`} />
             </div>
           </div>
           <div className="flex-auto flex justify-center items-center w-60">
@@ -58,7 +71,7 @@ export default function Forecast({ weatherData, focusDay, setFocusDay }) {
                   <DataLabel content="Precipitation" />
                 </div>
                 <div className="">
-                  <DataValue content={weatherData.currentConditions.precipprob ? `${weatherData.currentConditions.precipprob}% probability` : `None`} />
+                  <DataValue content={weatherData.currentConditions.precipprob ? `${Math.round(weatherData.currentConditions.precipprob)}% probability` : `None`} />
                   <DataValue content={weatherData.currentConditions.preciptype && ` ${weatherData.currentConditions.preciptype}`} />
                 </div>
               </div>
@@ -67,9 +80,9 @@ export default function Forecast({ weatherData, focusDay, setFocusDay }) {
                   <DataLabel content="Wind" />
                 </div>
                 <div className="">
-                  <DataValue content={weatherData.currentConditions.windspeed && `${weatherData.currentConditions.windspeed} km/h`} />
+                  <DataValue content={weatherData.currentConditions.windspeed && `${Math.round(weatherData.currentConditions.windspeed)} ${unitSymbols.speed[units]}`} />
                   &nbsp;
-                  <DataValue content={weatherData.currentConditions.winddir && `${weatherData.currentConditions.winddir}°`} />
+                  <DataValue content={weatherData.currentConditions.winddir && `${Math.round(weatherData.currentConditions.winddir)}°`} />
                 </div>
               </div>
               <div className="flex">
@@ -85,7 +98,7 @@ export default function Forecast({ weatherData, focusDay, setFocusDay }) {
                   <DataLabel content="Relative humidity" />
                 </div>
                 <div className="">
-                  <DataValue content={`${weatherData.currentConditions.humidity}%`} />
+                  <DataValue content={`${Math.round(weatherData.currentConditions.humidity)}%`} />
                 </div>
               </div>
             </div>
@@ -94,21 +107,21 @@ export default function Forecast({ weatherData, focusDay, setFocusDay }) {
       </div>
 
       {/* Today or focus day */}
-      <div className="p-8 rounded-3xl bg-white shadow-sm border-y border-zinc-100">
+      <div className="p-8 rounded-3xl bg-white shadow-sm border-y border-stone-100">
         <div className="flex items-start">
           <div className="w-28">
             <MajorHeading content={focusDay && new Date(weatherData.days.find(d => d.datetime === focusDay).datetime).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC' })} />
           </div>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2">
             <button
-              className="cursor-pointer disabled:cursor-default shadow-sm active:shadow-inner border border-zinc-100 rounded-sm disabled:text-zinc-300"
+              className="cursor-pointer disabled:cursor-default shadow-sm active:shadow-inner border border-stone-100 rounded-sm disabled:text-zinc-300"
               disabled={focusDay === new Date().toLocaleString('sv', { timeZone: weatherData.timezone }).split(' ')[0]}
               onClick={() => setFocusDay(new Date(new Date().setTime(new Date(focusDay).getTime() - (1000*60*60*24))).toISOString().split('T')[0])}
             >
               <HiChevronLeft size={18} />
             </button>
             <button
-              className="cursor-pointer disabled:cursor-default shadow-sm active:shadow-inner border border-zinc-100 rounded-sm disabled:text-zinc-300"
+              className="cursor-pointer disabled:cursor-default shadow-sm active:shadow-inner border border-stone-100 rounded-sm disabled:text-zinc-300"
               disabled={focusDay === new Date(new Date().setTime(new Date(new Date().toLocaleString('sv', { timeZone: weatherData.timezone }).split(' ')[0]).getTime() + (1000*60*60*24*13))).toISOString().split('T')[0]}
               onClick={() => setFocusDay(new Date(new Date().setTime(new Date(focusDay).getTime() + (1000*60*60*24))).toISOString().split('T')[0])}
             >
@@ -135,13 +148,13 @@ export default function Forecast({ weatherData, focusDay, setFocusDay }) {
         <div className="">
           <MinorHeading content="Temperature" />
           <div className="space-x-4">
-            <span><DataLabel content="High" /> <DataValue content={focusDay && weatherData.days.find(d => d.datetime === focusDay).tempmax} /></span>
-            <span><DataLabel content="Low" /> <DataValue content={focusDay && weatherData.days.find(d => d.datetime === focusDay).tempmin} /></span>
+            <span><DataLabel content="High" /> <DataValue content={focusDay && Math.round(weatherData.days.find(d => d.datetime === focusDay).tempmax)} /></span>
+            <span><DataLabel content="Low" /> <DataValue content={focusDay && Math.round(weatherData.days.find(d => d.datetime === focusDay).tempmin)} /></span>
           </div>
           <div className="flex">
             <ResponsiveContainer width="100%" height={150}>
               <LineChart data={focusDay && weatherData.days.find(d => d.datetime === focusDay).hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
-                <Line type="monotone" dataKey={hour => Math.round(hour.temp)} stroke={chartColors.orange} dot={false} animationDuration={300} label={{ fill: chartColors.zinc, fontSize: 14, position: 'top', offset: 10, }} />
+                <Line type="monotone" dataKey={hour => Math.round(hour.temp)} stroke={chartColors.orange} dot={false} animationDuration={300} label={{ fill: chartColors.stone, fontSize: 14, position: 'top', offset: 10, }} />
                 <XAxis dataKey={hour => convertTime(hour.datetime)} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
               </LineChart>
             </ResponsiveContainer>
@@ -169,7 +182,7 @@ export default function Forecast({ weatherData, focusDay, setFocusDay }) {
           <div className="flex">
             <ResponsiveContainer width="100%" height={150}>
               <LineChart data={focusDay && weatherData.days.find(d => d.datetime === focusDay).hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
-                <Line type="monotone" dataKey={hour => Math.round(hour.windspeed)} stroke={chartColors.emerald} dot={false} animationDuration={300} label={{ fill: chartColors.zinc, fontSize: 14, position: 'top', offset: 10, }} />
+                <Line type="monotone" dataKey={hour => Math.round(hour.windspeed)} stroke={chartColors.emerald} dot={false} animationDuration={300} label={{ fill: chartColors.stone, fontSize: 14, position: 'top', offset: 10, }} />
                 <XAxis dataKey={hour => convertTime(hour.datetime)} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
               </LineChart>
             </ResponsiveContainer>
@@ -182,7 +195,7 @@ export default function Forecast({ weatherData, focusDay, setFocusDay }) {
           <div className="flex">
             <ResponsiveContainer width="100%" height={150}>
               <LineChart data={focusDay && weatherData.days.find(d => d.datetime === focusDay).hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
-                <Line type="monotone" dataKey={hour => hour.cloudcover === '100' ? hour.cloudcover : Math.round(hour.cloudcover)} stroke={chartColors.pink} dot={false} animationDuration={300} label={{ fill: chartColors.zinc, fontSize: 14, position: 'top', offset: 10, }} />
+                <Line type="monotone" dataKey={hour => hour.cloudcover === '100' ? hour.cloudcover : Math.round(hour.cloudcover)} stroke={chartColors.pink} dot={false} animationDuration={300} label={{ fill: chartColors.stone, fontSize: 14, position: 'top', offset: 10, }} />
                 <XAxis dataKey={hour => convertTime(hour.datetime)} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
               </LineChart>
             </ResponsiveContainer>
@@ -193,7 +206,7 @@ export default function Forecast({ weatherData, focusDay, setFocusDay }) {
         <div className="">
           <MinorHeading content="Humidity" />
           <div>
-            <DataLabel content="Relative humidity" /> <DataValue content={focusDay && `${weatherData.days.find(d => d.datetime === focusDay).humidity}%`} />
+            <DataLabel content="Relative humidity" /> <DataValue content={focusDay && `${Math.round(weatherData.days.find(d => d.datetime === focusDay).humidity)}%`} />
           </div>
         </div>
 
@@ -202,7 +215,9 @@ export default function Forecast({ weatherData, focusDay, setFocusDay }) {
       {/* Short-term */}
       <div>
         <div className="px-8 pt-8">
-          <MajorHeading content="Forecast (short term)" />
+          <div className="flex space-x-2">
+            <MajorHeading content="Forecast" /><DataLabel content="(short-term)" />
+          </div>
         </div>
         <div className="px-4 pb-4 flex overflow-x-auto">
           {weatherData.days
@@ -211,7 +226,7 @@ export default function Forecast({ weatherData, focusDay, setFocusDay }) {
             .map(day => (
               <div
                 key={day.datetime}
-                className={`flex-none lg:flex-1 w-48 lg:w-full grid grid-rows-7 cursor-pointer w-full p-4 border border-transparent rounded-sm transition-all duration-300 pointer ${day.datetime === focusDay && 'bg-white shadow-sm border-zinc-100 rounded-sm'}`}
+                className={`flex-none lg:flex-1 w-48 lg:w-full grid grid-rows-7 cursor-pointer w-full p-4 border border-transparent rounded-sm transition-all duration-300 pointer ${day.datetime === focusDay && 'bg-white shadow-sm border-stone-100 rounded-sm'}`}
                 onClick={() => setFocusDay(day.datetime)}
               >
                 <div>
@@ -231,8 +246,8 @@ export default function Forecast({ weatherData, focusDay, setFocusDay }) {
                 <div>
                   <MinorHeading content="Temperature" />
                   <div className="space-x-4">
-                    <span><DataLabel content="High" /> <DataValue content={day.tempmax} /></span>
-                    <span><DataLabel content="Low" /> <DataValue content={day.tempmin} /></span>
+                    <span><DataLabel content="High" /> <DataValue content={Math.round(day.tempmax)} /></span>
+                    <span><DataLabel content="Low" /> <DataValue content={Math.round(day.tempmin)} /></span>
                   </div>
                   <ResponsiveContainer width="95%" height={50} className="mx-auto">
                     <LineChart data={weatherData.days.find(d => d === day).hours}>
@@ -243,7 +258,7 @@ export default function Forecast({ weatherData, focusDay, setFocusDay }) {
                 <div>
                   <MinorHeading content="Precipitation" />
                   <div className="space-x-4">
-                    <DataValue content={`${day.precip}%`} />
+                    <DataValue content={`${Math.round(day.precip)}%`} />
                     <DataArray content={day.preciptype} />
                   </div>
                   <ResponsiveContainer width="95%" height={50} className="mx-auto">
@@ -255,8 +270,8 @@ export default function Forecast({ weatherData, focusDay, setFocusDay }) {
                 <div>
                   <MinorHeading content="Wind" />
                   <div className="space-x-4">
-                    <DataValue content={`${day.windspeed} km/h`} />
-                    <DataValue content={`${day.winddir}°`} />
+                    <DataValue content={Math.round(day.windspeed)} />
+                    <DataValue content={`${Math.round(day.winddir)}°`} />
                   </div>
                   <ResponsiveContainer width="95%" height={50} className="mx-auto">
                     <LineChart data={weatherData.days.find(d => d === day).hours}>
@@ -267,7 +282,7 @@ export default function Forecast({ weatherData, focusDay, setFocusDay }) {
                 <div>
                   <MinorHeading content="Cloud cover" />
                   <div>
-                    <DataValue content={`${day.cloudcover}%`} />
+                    <DataValue content={`${Math.round(day.cloudcover)}%`} />
                   </div>
                   <ResponsiveContainer width="95%" height={50} className="mx-auto">
                     <LineChart data={weatherData.days.find(d => d === day).hours}>
@@ -278,7 +293,7 @@ export default function Forecast({ weatherData, focusDay, setFocusDay }) {
                 <div>
                   <MinorHeading content="Humidity" />
                   <div>
-                    <DataValue content={`${day.humidity}%`} />
+                    <DataValue content={`${Math.round(day.humidity)}%`} />
                   </div>
                 </div>
               </div>
@@ -290,7 +305,9 @@ export default function Forecast({ weatherData, focusDay, setFocusDay }) {
       {/* Long-term */}
       <div>
         <div className="px-8 pt-8">
-          <MajorHeading content="Forecast (long term)" />
+          <div className="flex space-x-2">
+            <MajorHeading content="Forecast" /><DataLabel content="(long-term)" />
+          </div>
         </div>
         <div className="px-4 pb-4 flex overflow-x-auto">
           {weatherData.days
@@ -299,7 +316,7 @@ export default function Forecast({ weatherData, focusDay, setFocusDay }) {
             .map((day, i) => (
               <div
                 key={day.datetime}
-                className={`flex-none xl:flex-1 w-48 xl:w-full grid grid-rows-7 cursor-pointer p-4 border border-transparent rounded-sm transition-all duration-300 ${day.datetime === focusDay && 'bg-white shadow-sm border-zinc-100 rounded-sm'}`}
+                className={`flex-none xl:flex-1 w-48 xl:w-full grid grid-rows-7 cursor-pointer p-4 border border-transparent rounded-sm transition-all duration-300 ${day.datetime === focusDay && 'bg-white shadow-sm border-stone-100 rounded-sm'}`}
                 onClick={() => setFocusDay(day.datetime)}
               >
                 <div>
@@ -319,33 +336,33 @@ export default function Forecast({ weatherData, focusDay, setFocusDay }) {
                 <div>
                   <MinorHeading content="Temperature" />
                   <div>
-                    <div><DataLabel content="High" /> <DataValue content={day.tempmax} /></div>
-                    <div><DataLabel content="Low" /> <DataValue content={day.tempmin} /></div>
+                    <div><DataLabel content="High" /> <DataValue content={Math.round(day.tempmax)} /></div>
+                    <div><DataLabel content="Low" /> <DataValue content={Math.round(day.tempmin)} /></div>
                   </div>
                 </div>
                 <div>
                   <MinorHeading content="Precipitation" />
                   <div className="space-x-4">
-                    <DataValue content={`${day.precip}%`} />
+                    <DataValue content={`${Math.round(day.precip)}%`} />
                     <DataArray content={day.preciptype} />
                   </div>
                 </div>
                 <div>
                   <MinorHeading content="Wind" />
                   <div>
-                    <DataValue content={`${day.windspeed} km/h`} />
+                    <DataValue content={Math.round(day.windspeed)} />
                   </div>
                 </div>
                 <div>
                   <MinorHeading content="Cloud cover" />
                   <div>
-                    <DataValue content={`${day.cloudcover}%`} />
+                    <DataValue content={`${Math.round(day.cloudcover)}%`} />
                   </div>
                 </div>
                 <div>
                   <MinorHeading content="Humidity" />
                   <div>
-                    <DataValue content={`${day.humidity}%`} />
+                    <DataValue content={`${Math.round(day.humidity)}%`} />
                   </div>
                 </div>
               </div>

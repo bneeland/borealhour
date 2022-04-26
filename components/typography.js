@@ -16,7 +16,7 @@ export function MinorHeading(props) {
 
 export function DataLabel(props) {
   return (
-    <span className="text-gray-500 text-sm">
+    <span className="text-zinc-500 text-sm">
       {props.content}
     </span>
   )
