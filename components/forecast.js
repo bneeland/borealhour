@@ -47,14 +47,15 @@ function convertTime(inputDate) {
 }
 
 export default function Forecast({ weatherData, units, focusDay, setFocusDay }) {
+  console.log(weatherData)
   return (
     <>
-      {/* Now */}
-      <div className="p-8">
+      {/* Current */}
+      <div className="p-8 lg:p-12">
         <div className="flex space-x-2">
           <MajorHeading content="Current" /><DataLabel content={`(as of ${convertTime(weatherData.currentConditions.datetime)})`} />
         </div>
-        <div className="flex flex-col sm:flex-row space-y-2 sm:space-x-2">
+        <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-2">
           <div className="flex-1 sm:flex-none flex items-center justify-center">
             <div className="flex flex-col items-center">
               <div><WeatherIcon type={weatherData.currentConditions.icon} size="lg" color="black" /></div>
@@ -109,25 +110,28 @@ export default function Forecast({ weatherData, units, focusDay, setFocusDay }) 
       </div>
 
       {/* Today or focus day */}
-      <div className="p-8 rounded-3xl bg-white shadow-sm border-y border-stone-100">
-        <div className="flex items-start">
+      <div className="p-8 lg:p-12 rounded-3xl bg-white shadow-sm border-y border-stone-100">
+        <div className="flex items-center mb-4">
           <div className="w-28">
-            <MajorHeading content={focusDay && new Date(weatherData.days.find(d => d.datetime === focusDay).datetime).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC' })} />
+            <MajorHeading
+              content={focusDay && new Date(weatherData.days.find(d => d.datetime === focusDay).datetime).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC' })}
+              additionalClasses="mb-0"
+            />
           </div>
           <div className="flex items-center space-x-2">
             <button
-              className="cursor-pointer disabled:cursor-default shadow-sm active:shadow-inner border border-stone-100 rounded-sm disabled:text-zinc-300"
+              className="p-1 sm:p-0 cursor-pointer disabled:cursor-default shadow-sm active:shadow-inner disabled:active:shadow-sm border border-stone-100 rounded-sm disabled:text-zinc-300"
               disabled={focusDay === new Date().toLocaleString('sv', { timeZone: weatherData.timezone }).split(' ')[0]}
               onClick={() => setFocusDay(new Date(new Date().setTime(new Date(focusDay).getTime() - (1000*60*60*24))).toISOString().split('T')[0])}
             >
-              <HiChevronLeft size={18} />
+              <HiChevronLeft size={20} />
             </button>
             <button
-              className="cursor-pointer disabled:cursor-default shadow-sm active:shadow-inner border border-stone-100 rounded-sm disabled:text-zinc-300"
+              className="p-1 sm:p-0 cursor-pointer disabled:cursor-default shadow-sm active:shadow-inner disabled:active:shadow-sm border border-stone-100 rounded-sm disabled:text-zinc-300"
               disabled={focusDay === new Date(new Date().setTime(new Date(new Date().toLocaleString('sv', { timeZone: weatherData.timezone }).split(' ')[0]).getTime() + (1000*60*60*24*13))).toISOString().split('T')[0]}
               onClick={() => setFocusDay(new Date(new Date().setTime(new Date(focusDay).getTime() + (1000*60*60*24))).toISOString().split('T')[0])}
             >
-              <HiChevronRight size={18} />
+              <HiChevronRight size={20} />
             </button>
           </div>
         </div>
@@ -187,7 +191,7 @@ export default function Forecast({ weatherData, units, focusDay, setFocusDay }) 
             <ResponsiveContainer width="100%" height={150}>
               <AreaChart data={focusDay && weatherData.days.find(d => d.datetime === focusDay).hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
                 <Area type="monotone" dataKey={hour => Math.round(hour.windspeed)} stroke={chartColors.emeraldDark} fill={chartColors.emeraldLight} dot={false} animationDuration={300}>
-                  <LabelList dataKey={hour => ({ temp: Math.round(hour.temp), datetime: hour.datetime })} content={<GenericLabel />} />
+                  <LabelList dataKey={hour => ({ temp: Math.round(hour.windspeed), datetime: hour.datetime })} content={<GenericLabel />} />
                 </Area>
                 <XAxis dataKey={hour => convertTime(hour.datetime)} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
               </AreaChart>
@@ -202,7 +206,7 @@ export default function Forecast({ weatherData, units, focusDay, setFocusDay }) 
             <ResponsiveContainer width="100%" height={150}>
               <AreaChart data={focusDay && weatherData.days.find(d => d.datetime === focusDay).hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
                 <Area type="monotone" dataKey={hour => hour.cloudcover === '100' ? hour.cloudcover : Math.round(hour.cloudcover)} stroke={chartColors.pinkDark} fill={chartColors.pinkLight} dot={false} animationDuration={300}>
-                  <LabelList dataKey={hour => ({ temp: Math.round(hour.temp), datetime: hour.datetime })} content={<GenericLabel />} />
+                  <LabelList dataKey={hour => ({ temp: Math.round(hour.cloudcover), datetime: hour.datetime })} content={<GenericLabel />} />
                 </Area>
                 <XAxis dataKey={hour => convertTime(hour.datetime)} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
               </AreaChart>
@@ -222,27 +226,27 @@ export default function Forecast({ weatherData, units, focusDay, setFocusDay }) 
 
       {/* Short-term */}
       <div>
-        <div className="px-8 pt-8">
+        <div className="px-8 lg:px-12 pt-8 lg:pt-12">
           <div className="flex space-x-2">
             <MajorHeading content="Forecast" /><DataLabel content="(short-term)" />
           </div>
         </div>
-        <div className="px-4 pb-4 flex overflow-x-auto">
+        <div className="px-4 lg:px-8 pb-4 lg:pb-8 flex overflow-x-auto">
           {weatherData.days
             .slice(0, 5)
             // .filter(day => day !== weatherData.days.find(d => d.datetime === focusDay))
             .map(day => (
               <div
                 key={day.datetime}
-                className={`flex-none lg:flex-1 w-48 lg:w-full grid grid-rows-7 cursor-pointer w-full p-4 border border-transparent rounded-sm transition-all duration-300 pointer ${day.datetime === focusDay && 'bg-white shadow-sm border-stone-100 rounded-sm'}`}
+                className={`flex-none lg:flex-1 w-48 lg:w-full grid grid-rows-7 cursor-pointer w-full p-4 border border-transparent rounded-sm transition-all duration-300 ${day.datetime === focusDay && 'bg-white shadow-sm border-stone-100 rounded-sm'}`}
                 onClick={() => setFocusDay(day.datetime)}
               >
-                <div>
+                <div className="mb-4">
                   <DataLabel content={new Date(day.datetime).toLocaleDateString('en-US', { weekday: 'long', timeZone: 'UTC' })} />
                 </div>
-                <div>
+                <div className="space-y-2">
                   <div className="flex justify-center">
-                    <WeatherIcon type={day.icon} size="sm" color="black" />
+                    <WeatherIcon type={day.icon} size="md" color="black" />
                   </div>
                   <div>
                     <DataValue content={day.conditions} />
@@ -313,12 +317,12 @@ export default function Forecast({ weatherData, units, focusDay, setFocusDay }) 
 
       {/* Long-term */}
       <div>
-        <div className="px-8 pt-8">
+        <div className="px-8 lg:px-12 pt-8 lg:pt-12">
           <div className="flex space-x-2">
             <MajorHeading content="Forecast" /><DataLabel content="(long-term)" />
           </div>
         </div>
-        <div className="px-4 pb-4 flex overflow-x-auto">
+        <div className="px-4 lg:px-8 pb-4 lg:pb-8 flex overflow-x-auto">
           {weatherData.days
             .slice(5, 14)
             // .filter(day => day !== weatherData.days.find(d => d.datetime === focusDay))
@@ -328,10 +332,10 @@ export default function Forecast({ weatherData, units, focusDay, setFocusDay }) 
                 className={`flex-none xl:flex-1 w-48 xl:w-full grid grid-rows-7 cursor-pointer p-4 border border-transparent rounded-sm transition-all duration-300 ${day.datetime === focusDay && 'bg-white shadow-sm border-stone-100 rounded-sm'}`}
                 onClick={() => setFocusDay(day.datetime)}
               >
-                <div>
+                <div className="mb-4">
                   <DataLabel content={new Date(day.datetime).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC' })} />
                 </div>
-                <div>
+                <div className="space-y-2">
                   <div className="flex justify-center">
                     <WeatherIcon type={day.icon} size="sm" color="black" />
                   </div>

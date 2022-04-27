@@ -1,6 +1,6 @@
 export function MajorHeading(props) {
   return (
-    <div className="text-sm text-zinc-500 uppercase mb-4">
+    <div className={'text-sm text-zinc-500 uppercase mb-4 ' + props.additionalClasses}>
       {props.content}
     </div>
   )

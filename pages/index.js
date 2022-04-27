@@ -24,7 +24,7 @@ export default function Home() {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
 
-      <div className="flex space-x-4 px-4 h-14 m-2 fixed inset-x-0 top-0 z-40 bg-white rounded shadow-sm border border-stone-100">
+      <div className="flex space-x-4 px-4 h-14 m-2 lg:mx-auto lg:w-1/2 fixed inset-x-0 top-0 z-40 bg-white rounded shadow-sm border border-stone-100">
         <div className="flex-none flex items-center">
           Borealhour
         </div>
@@ -33,7 +33,7 @@ export default function Home() {
         </div>
         <div className="flex-none flex items-center">
           <Popover>
-            <Popover.Button className="flex items-center text-zinc-600 hover:text-zinc-900 transition-all">
+            <Popover.Button className="flex items-center text-zinc-600 hover:text-zinc-900 transition-all p-2 sm:p-0">
               <HiOutlineCog size={20} />
             </Popover.Button>
             <Popover.Panel className="absolute right-2 p-4 mt-2 shadow-md border border-stone-100 rounded bg-white z-50">
