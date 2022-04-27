@@ -72,7 +72,7 @@ export default function Search({ units, onSelectLocation }) {
       <Combobox value={selectedLocation} onChange={e => locationSelectionHandler(e)}>
         <Combobox.Input
           onChange={locationInputHandler}
-          autoComplete="off"
+          autoComplete="on"
           className="w-full px-2 py-1 bg-stone-100 shadow-inner border border-stone-100 rounded transition-all font-light"
           placeholder="Search for a location"
         />

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import PrecipitationLabel from './precipitationLabel'
-import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, LabelList, } from 'recharts'
+import { PrecipitationLabel, GenericLabel } from './labels'
+import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, LabelList, } from 'recharts'
 import { WiSnow, WiRain, WiFog, WiWindy, WiCloudy, WiDayCloudy, WiNightCloudy, WiDaySunny, WiNightClear, WiSleet, WiSnowflakeCold, WiRainMix, } from "react-icons/wi"
 import WeatherIcon from '../components/weatherIcon'
 import { HiChevronLeft, HiChevronRight, } from 'react-icons/hi'
@@ -17,10 +17,14 @@ const weekdays = {
 }
 
 const chartColors = {
-  orange: 'rgb(234 88 12)',
-  sky: 'rgb(2 132 199)',
-  emerald: 'rgb(4 120 87)',
-  pink: 'rgb(190 24 93)',
+  orangeDark: 'rgb(234 88 12)',
+  orangeLight: 'rgb(255 237 213)',
+  skyDark: 'rgb(2 132 199)',
+  skyLight: 'rgb(224 242 254)',
+  emeraldDark: 'rgb(4 120 87)',
+  emeraldLight: 'rgb(209 250 229)',
+  pinkDark: 'rgb(190 24 93)',
+  pinkLight: 'rgb(252 231 243)',
   stone: 'rgb(161 161 170)',
 }
 
@@ -42,6 +46,9 @@ function convertTime(inputDate) {
 }
 
 export default function Forecast({ weatherData, units, focusDay, setFocusDay }) {
+  console.log('weatherData')
+  console.log(weatherData)
+
   return (
     <>
       {/* Now */}
@@ -150,10 +157,12 @@ export default function Forecast({ weatherData, units, focusDay, setFocusDay }) 
           </div>
           <div className="flex">
             <ResponsiveContainer width="100%" height={150}>
-              <LineChart data={focusDay && weatherData.days.find(d => d.datetime === focusDay).hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
-                <Line type="monotone" dataKey={hour => Math.round(hour.temp)} stroke={chartColors.orange} dot={false} animationDuration={300} label={{ fill: chartColors.stone, fontSize: 14, position: 'top', offset: 10, }} />
+              <AreaChart data={focusDay && weatherData.days.find(d => d.datetime === focusDay).hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
+                <Area type="monotone" dataKey={hour => Math.round(hour.temp)} stroke={chartColors.orangeDark} fill={chartColors.orangeLight} dot={false} animationDuration={300}>
+                  <LabelList dataKey={hour => ({ temp: Math.round(hour.temp), datetime: hour.datetime })} content={<GenericLabel />} />
+                </Area>
                 <XAxis dataKey={hour => convertTime(hour.datetime)} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
-              </LineChart>
+              </AreaChart>
             </ResponsiveContainer>
           </div>
         </div>
@@ -163,12 +172,12 @@ export default function Forecast({ weatherData, units, focusDay, setFocusDay }) 
           <MinorHeading content="Precipitation" />
           <div className="flex">
             <ResponsiveContainer width="100%" height={150}>
-              <LineChart data={focusDay && weatherData.days.find(d => d.datetime === focusDay).hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
-                <Line type="monotone" dataKey={hour => Math.round(hour.precipprob)} stroke={chartColors.sky} dot={false} animationDuration={300}>
-                  <LabelList dataKey={hour => ({ precipProb: Math.round(hour.precipprob), precipType: hour.preciptype})} content={<PrecipitationLabel />} />
-                </Line>
+              <AreaChart data={focusDay && weatherData.days.find(d => d.datetime === focusDay).hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
+                <Area type="monotone" dataKey={hour => Math.round(hour.precipprob)} stroke={chartColors.skyDark} fill={chartColors.skyLight} dot={false} animationDuration={300}>
+                  <LabelList dataKey={hour => ({ precipProb: Math.round(hour.precipprob), precipType: hour.preciptype, datetime: hour.datetime })} content={<PrecipitationLabel />} />
+                </Area>
                 <XAxis dataKey={hour => convertTime(hour.datetime)} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
-              </LineChart>
+              </AreaChart>
             </ResponsiveContainer>
           </div>
         </div>
@@ -178,10 +187,12 @@ export default function Forecast({ weatherData, units, focusDay, setFocusDay }) 
           <MinorHeading content="Wind" />
           <div className="flex">
             <ResponsiveContainer width="100%" height={150}>
-              <LineChart data={focusDay && weatherData.days.find(d => d.datetime === focusDay).hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
-                <Line type="monotone" dataKey={hour => Math.round(hour.windspeed)} stroke={chartColors.emerald} dot={false} animationDuration={300} label={{ fill: chartColors.stone, fontSize: 14, position: 'top', offset: 10, }} />
+              <AreaChart data={focusDay && weatherData.days.find(d => d.datetime === focusDay).hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
+                <Area type="monotone" dataKey={hour => Math.round(hour.windspeed)} stroke={chartColors.emeraldDark} fill={chartColors.emeraldLight} dot={false} animationDuration={300}>
+                  <LabelList dataKey={hour => ({ temp: Math.round(hour.temp), datetime: hour.datetime })} content={<GenericLabel />} />
+                </Area>
                 <XAxis dataKey={hour => convertTime(hour.datetime)} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
-              </LineChart>
+              </AreaChart>
             </ResponsiveContainer>
           </div>
         </div>
@@ -191,10 +202,12 @@ export default function Forecast({ weatherData, units, focusDay, setFocusDay }) 
           <MinorHeading content="Cloud cover" />
           <div className="flex">
             <ResponsiveContainer width="100%" height={150}>
-              <LineChart data={focusDay && weatherData.days.find(d => d.datetime === focusDay).hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
-                <Line type="monotone" dataKey={hour => hour.cloudcover === '100' ? hour.cloudcover : Math.round(hour.cloudcover)} stroke={chartColors.pink} dot={false} animationDuration={300} label={{ fill: chartColors.stone, fontSize: 14, position: 'top', offset: 10, }} />
+              <AreaChart data={focusDay && weatherData.days.find(d => d.datetime === focusDay).hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
+                <Area type="monotone" dataKey={hour => hour.cloudcover === '100' ? hour.cloudcover : Math.round(hour.cloudcover)} stroke={chartColors.pinkDark} fill={chartColors.pinkLight} dot={false} animationDuration={300}>
+                  <LabelList dataKey={hour => ({ temp: Math.round(hour.temp), datetime: hour.datetime })} content={<GenericLabel />} />
+                </Area>
                 <XAxis dataKey={hour => convertTime(hour.datetime)} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
-              </LineChart>
+              </AreaChart>
             </ResponsiveContainer>
           </div>
         </div>
@@ -247,9 +260,9 @@ export default function Forecast({ weatherData, units, focusDay, setFocusDay }) 
                     <span><DataLabel content="Low" /> <DataValue content={Math.round(day.tempmin)} /></span>
                   </div>
                   <ResponsiveContainer width="95%" height={50} className="mx-auto">
-                    <LineChart data={weatherData.days.find(d => d === day).hours}>
-                      <Line type="monotone" dataKey="temp" stroke={chartColors.orange} dot={false} animationDuration={0} />
-                    </LineChart>
+                    <AreaChart data={weatherData.days.find(d => d === day).hours}>
+                      <Area type="monotone" dataKey="temp" stroke={chartColors.orangeDark} fill={chartColors.orangeLight} dot={false} animationDuration={0} />
+                    </AreaChart>
                   </ResponsiveContainer>
                 </div>
                 <div>
@@ -259,9 +272,9 @@ export default function Forecast({ weatherData, units, focusDay, setFocusDay }) 
                     <DataArray content={day.preciptype} />
                   </div>
                   <ResponsiveContainer width="95%" height={50} className="mx-auto">
-                    <LineChart data={weatherData.days.find(d => d === day).hours}>
-                      <Line type="monotone" dataKey="precipprob" stroke={chartColors.sky} dot={false} animationDuration={0} />
-                    </LineChart>
+                    <AreaChart data={weatherData.days.find(d => d === day).hours}>
+                      <Area type="monotone" dataKey="precipprob" stroke={chartColors.skyDark} fill={chartColors.skyLight} dot={false} animationDuration={0} />
+                    </AreaChart>
                   </ResponsiveContainer>
                 </div>
                 <div>
@@ -271,9 +284,9 @@ export default function Forecast({ weatherData, units, focusDay, setFocusDay }) 
                     <DataValue content={`${Math.round(day.winddir)}°`} />
                   </div>
                   <ResponsiveContainer width="95%" height={50} className="mx-auto">
-                    <LineChart data={weatherData.days.find(d => d === day).hours}>
-                      <Line type="monotone" dataKey="windspeed" stroke={chartColors.emerald} dot={false} animationDuration={0} />
-                    </LineChart>
+                    <AreaChart data={weatherData.days.find(d => d === day).hours}>
+                      <Area type="monotone" dataKey="windspeed" stroke={chartColors.emeraldDark} fill={chartColors.emeraldLight} dot={false} animationDuration={0} />
+                    </AreaChart>
                   </ResponsiveContainer>
                 </div>
                 <div>
@@ -282,9 +295,9 @@ export default function Forecast({ weatherData, units, focusDay, setFocusDay }) 
                     <DataValue content={`${Math.round(day.cloudcover)}%`} />
                   </div>
                   <ResponsiveContainer width="95%" height={50} className="mx-auto">
-                    <LineChart data={weatherData.days.find(d => d === day).hours}>
-                      <Line type="monotone" dataKey="cloudcover" stroke={chartColors.pink} dot={false} animationDuration={0} />
-                    </LineChart>
+                    <AreaChart data={weatherData.days.find(d => d === day).hours}>
+                      <Area type="monotone" dataKey="cloudcover" stroke={chartColors.pinkDark} fill={chartColors.pinkLight} dot={false} animationDuration={0} />
+                    </AreaChart>
                   </ResponsiveContainer>
                 </div>
                 <div>
