@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { PrecipitationLabel, GenericLabel } from './labels'
-import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, LabelList, } from 'recharts'
+import { ResponsiveContainer, AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip, LabelList, } from 'recharts'
 import { WiSnow, WiRain, WiFog, WiWindy, WiCloudy, WiDayCloudy, WiNightCloudy, WiDaySunny, WiNightClear, WiSleet, WiSnowflakeCold, WiRainMix, } from "react-icons/wi"
 import WeatherIcon from '../components/weatherIcon'
 import { HiChevronLeft, HiChevronRight, } from 'react-icons/hi'
@@ -20,6 +20,7 @@ const chartColors = {
   orangeDark: 'rgb(234 88 12)',
   orangeLight: 'rgb(255 237 213)',
   skyDark: 'rgb(2 132 199)',
+  skyMedium: 'rgb(186 230 253)',
   skyLight: 'rgb(224 242 254)',
   emeraldDark: 'rgb(4 120 87)',
   emeraldLight: 'rgb(209 250 229)',
@@ -46,9 +47,6 @@ function convertTime(inputDate) {
 }
 
 export default function Forecast({ weatherData, units, focusDay, setFocusDay }) {
-  console.log('weatherData')
-  console.log(weatherData)
-
   return (
     <>
       {/* Now */}
@@ -172,12 +170,12 @@ export default function Forecast({ weatherData, units, focusDay, setFocusDay }) 
           <MinorHeading content="Precipitation" />
           <div className="flex">
             <ResponsiveContainer width="100%" height={150}>
-              <AreaChart data={focusDay && weatherData.days.find(d => d.datetime === focusDay).hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
-                <Area type="monotone" dataKey={hour => Math.round(hour.precipprob)} stroke={chartColors.skyDark} fill={chartColors.skyLight} dot={false} animationDuration={300}>
+              <BarChart data={focusDay && weatherData.days.find(d => d.datetime === focusDay).hours} margin={{ top: 35, right: 25, left: 25, bottom: 15, }}>
+                <Bar dataKey={hour => Math.round(hour.precipprob)} fill={chartColors.skyMedium} animationDuration={300}>
                   <LabelList dataKey={hour => ({ precipProb: Math.round(hour.precipprob), precipType: hour.preciptype, datetime: hour.datetime })} content={<PrecipitationLabel />} />
-                </Area>
-                <XAxis dataKey={hour => convertTime(hour.datetime)} height={10} interval="preserveStart" axisLine={false} tickLine={false} tick={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
-              </AreaChart>
+                </Bar>
+                <XAxis dataKey={hour => convertTime(hour.datetime)} height={10} interval="preserveStart" axisLine={true} tickLine={false} tick={{ fill: 'gray', fontSize: 14, position: 'top', offset: 10, }} />
+              </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
@@ -272,9 +270,10 @@ export default function Forecast({ weatherData, units, focusDay, setFocusDay }) 
                     <DataArray content={day.preciptype} />
                   </div>
                   <ResponsiveContainer width="95%" height={50} className="mx-auto">
-                    <AreaChart data={weatherData.days.find(d => d === day).hours}>
-                      <Area type="monotone" dataKey="precipprob" stroke={chartColors.skyDark} fill={chartColors.skyLight} dot={false} animationDuration={0} />
-                    </AreaChart>
+                    <BarChart data={weatherData.days.find(d => d === day).hours} >
+                      <Bar dataKey="precipprob" fill={chartColors.skyMedium} animationDuration={300} />
+                      <XAxis height={1} tickLine={false} tick={false} />
+                    </BarChart>
                   </ResponsiveContainer>
                 </div>
                 <div>
