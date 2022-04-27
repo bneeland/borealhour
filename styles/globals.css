@@ -11,6 +11,6 @@ html {
   background: rgb(245 245 244);
 }
 
-div.pointer svg.recharts-surface {
+div.recharts-cursor-pointer svg.recharts-surface {
   cursor: pointer;
 }

@@ -238,7 +238,7 @@ export default function Forecast({ weatherData, units, focusDay, setFocusDay }) 
             .map(day => (
               <div
                 key={day.datetime}
-                className={`flex-none lg:flex-1 w-48 lg:w-full grid grid-rows-7 cursor-pointer w-full p-4 border border-transparent rounded-sm transition-all duration-300 ${day.datetime === focusDay && 'bg-white shadow-sm border-stone-100 rounded-sm'}`}
+                className={`flex-none lg:flex-1 w-48 lg:w-full grid grid-rows-7 cursor-pointer recharts-cursor-pointer w-full p-4 border border-transparent rounded-sm transition-all duration-300 ${day.datetime === focusDay && 'bg-white shadow-sm border-stone-100 rounded-sm'}`}
                 onClick={() => setFocusDay(day.datetime)}
               >
                 <div className="mb-4">
