@@ -19,7 +19,7 @@ export default function Home() {
   function getWeatherData(_query) {
     return axios({
       method: 'get',
-      url: `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${_query}?unitGroup=${units}&key=${process.env.NEXT_PUBLIC_VISUAL_CROSSING_API_KEY}&contentType=json`,
+      url: `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${_query}?unitGroup=${units}&key=${process.env.NEXT_PUBLIC_VISUAL_CROSSING_API_KEY_ALT}&contentType=json`,
     })
       .then(response => response.data)
       .catch(error => error.response.data)
@@ -32,7 +32,7 @@ export default function Home() {
       getWeatherData(_selectedLocation).then(data => {
         if (data) {
           // Only set the focus day if it's not currently set
-          // of if it's set but it's earlier than current date based on selected location's timezone
+          // or if it's set but it's earlier than current date based on selected location's timezone
           const currentDate = new Date().toLocaleString('sv', { timeZone: data.timezone }).split(' ')[0]
           if (!focusDay) {
             setFocusDay(currentDate)
@@ -59,12 +59,12 @@ export default function Home() {
   return (
     <div className="bg-stone-100 pt-16">
       <Head>
-        <title>Borealhour - weather</title>
+        <title>Borealhour · Weather</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
 
       <div className="flex space-x-4 px-4 h-14 m-2 lg:mx-auto lg:w-1/2 fixed inset-x-0 top-0 z-40 bg-white rounded shadow-sm border border-stone-100">
-        <div className="flex-none flex items-center">
+        <div className="flex-none flex items-center cursor-default">
           Borealhour
         </div>
         <div className="flex-1 flex items-center">
@@ -84,7 +84,7 @@ export default function Home() {
             <Popover.Button className="flex items-center text-zinc-600 hover:text-zinc-900 transition-all p-2 sm:p-0">
               <HiOutlineCog size={20} />
             </Popover.Button>
-            <Popover.Panel className="absolute right-2 p-4 mt-2 shadow-md border border-stone-100 rounded bg-white z-50">
+            <Popover.Panel className="absolute right-2 p-4 mt-3 shadow-md border border-stone-100 rounded bg-white z-50">
               <div className="grid">
                 <div className="flex items-center space-x-3">
                   <div
@@ -119,7 +119,13 @@ export default function Home() {
       </div>
 
       {selectedLocation ? (
-          <Forecast weatherData={weatherData} units={units} focusDay={focusDay} setFocusDay={focusDay => setFocusDay(focusDay)} />
+          <Forecast
+            weatherData={weatherData}
+            units={units}
+            focusDay={focusDay}
+            setFocusDay={focusDay => setFocusDay(focusDay)}
+            selectedLocation={selectedLocation}
+          />
       ) : (
           <Splash />
       )}

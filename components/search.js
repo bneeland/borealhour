@@ -52,7 +52,7 @@ export default function Search({
         />
         <Combobox.Options
           className={(autocompleteLocation[0] ? '' : 'hidden') + ' ' +
-          'absolute py-2 mt-2 shadow-md border border-stone-100 rounded bg-white z-50'}
+          'absolute py-2 mt-1 shadow-md border border-stone-100 rounded bg-white z-50'}
         >
           {autocompleteLocation && autocompleteLocation.map((location) => (
             <Combobox.Option key={Math.random()} value={location}>

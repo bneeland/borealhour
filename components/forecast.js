@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import Head from 'next/head'
 import { PrecipitationLabel, GenericLabel } from './labels'
 import { ResponsiveContainer, AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip, LabelList, } from 'recharts'
 import { WiSnow, WiRain, WiFog, WiWindy, WiCloudy, WiDayCloudy, WiNightCloudy, WiDaySunny, WiNightClear, WiSleet, WiSnowflakeCold, WiRainMix, } from "react-icons/wi"
@@ -6,6 +7,8 @@ import WeatherIcon from '../components/weatherIcon'
 import { HiChevronLeft, HiChevronRight, } from 'react-icons/hi'
 import { MajorHeading, MinorHeading, DataLabel, DataValue, DataArray, } from './typography'
 import Loading from '../components/loading'
+
+import { WiMoonrise, } from "react-icons/wi"
 
 const weekdays = {
   1: 'Monday',
@@ -47,17 +50,27 @@ function convertTime(inputDate) {
   return outputDate
 }
 
-export default function Forecast({ weatherData, units, focusDay, setFocusDay }) {
+export default function Forecast({
+  weatherData,
+  units,
+  focusDay,
+  setFocusDay,
+  selectedLocation,
+}) {
   if (!weatherData) {
     return <Loading />
   }
 
   return (
     <>
+      <Head>
+        <title>{`${Math.round(weatherData.currentConditions.temp)} ${unitSymbols.temperature[units]} · ${selectedLocation} · Borealhour`}</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
       {/* Current */}
       <div className="p-8 lg:p-12">
         <div className="flex space-x-2">
-          <MajorHeading content="Current" /><DataLabel content={`(as of ${convertTime(weatherData.currentConditions.datetime)})`} />
+          <MajorHeading content="Current" /><DataLabel content="·" /><DataLabel content={`${convertTime(weatherData.currentConditions.datetime)}`} title="Time of the latest available data" />
         </div>
         <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-2">
           <div className="flex-1 sm:flex-none flex items-center justify-center">
@@ -232,7 +245,7 @@ export default function Forecast({ weatherData, units, focusDay, setFocusDay }) 
       <div>
         <div className="px-8 lg:px-12 pt-8 lg:pt-12">
           <div className="flex space-x-2">
-            <MajorHeading content="Forecast" /><DataLabel content="(short-term)" />
+            <MajorHeading content="Forecast" /><DataLabel content="·" /><DataLabel content="Short-term" />
           </div>
         </div>
         <div className="px-4 lg:px-8 flex overflow-x-auto">
@@ -321,9 +334,9 @@ export default function Forecast({ weatherData, units, focusDay, setFocusDay }) 
       {/* Long-term */}
       <div>
         <div className="px-8 lg:px-12 pt-8 lg:pt-12">
-          <div className="flex space-x-2">
-            <MajorHeading content="Forecast" /><DataLabel content="(long-term)" />
-          </div>
+        <div className="flex space-x-2">
+          <MajorHeading content="Forecast" /><DataLabel content="·" /><DataLabel content="Long-term" />
+        </div>
         </div>
         <div className="px-4 lg:px-8 pb-4 lg:pb-8 flex overflow-x-auto">
           {weatherData.days
