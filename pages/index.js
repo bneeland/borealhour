@@ -1,4 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
+import useSWR, { mutate } from 'swr'
 import Head from 'next/head'
 import Search from '../components/search'
 import Forecast from '../components/forecast'
@@ -11,11 +13,40 @@ export default function Home() {
   const [weatherData, setWeatherData] = useState()
   const [focusDay, setFocusDay] = useState()
   const [units, setUnits] = useState('metric')
+  const [selectedLocation, setSelectedLocation] = useState('')
+  const [autocompleteLocation, setAutocompleteLocation] = useState('')
 
-  function setLocationHandler(weatherData) {
-    setWeatherData(weatherData)
-    setFocusDay(weatherData.days[0].datetime)
+  function getWeatherData(_query) {
+    return axios({
+      method: 'get',
+      url: `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${_query}?unitGroup=${units}&key=${process.env.NEXT_PUBLIC_VISUAL_CROSSING_API_KEY}&contentType=json`,
+    })
+      .then(response => response.data)
+      .catch(error => error.response.data)
   }
+
+  function swrHandler(_message) {
+    const _selectedLocation = localStorage.getItem('selectedLocation')
+
+    if (_selectedLocation) {
+      getWeatherData(_selectedLocation).then(data => {
+        if (data) {
+          setAutocompleteLocation([data.resolvedAddress])
+          setWeatherData(data)
+          if (!focusDay) {
+            setFocusDay(data.days[0].datetime)
+          }
+        }
+      })
+      setSelectedLocation(_selectedLocation)
+    }
+  }
+
+  useSWR('Get weather data on page load or focus', swrHandler)
+
+  useEffect(() => {
+    swrHandler()
+  }, [units])
 
   return (
     <div className="bg-stone-100 pt-16">
@@ -29,7 +60,16 @@ export default function Home() {
           Borealhour
         </div>
         <div className="flex-1 flex items-center">
-          <Search units={units} onSelectLocation={weatherData => setLocationHandler(weatherData)} />
+          <Search
+            units={units}
+            getWeatherData={getWeatherData}
+            autocompleteLocation={autocompleteLocation}
+            setAutocompleteLocation={setAutocompleteLocation}
+            setWeatherData={setWeatherData}
+            selectedLocation={selectedLocation}
+            setSelectedLocation={setSelectedLocation}
+            setFocusDay={setFocusDay}
+          />
         </div>
         <div className="flex-none flex items-center">
           <Popover>
@@ -70,7 +110,7 @@ export default function Home() {
         </div>
       </div>
 
-      {weatherData ? (
+      {selectedLocation ? (
         <div>
           <Forecast weatherData={weatherData} units={units} focusDay={focusDay} setFocusDay={focusDay => setFocusDay(focusDay)} />
         </div>

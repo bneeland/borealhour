@@ -47,7 +47,10 @@ function convertTime(inputDate) {
 }
 
 export default function Forecast({ weatherData, units, focusDay, setFocusDay }) {
-  console.log(weatherData)
+  if (!weatherData) {
+    return <>Loading&hellip;</>
+  }
+
   return (
     <>
       {/* Current */}
@@ -234,7 +237,6 @@ export default function Forecast({ weatherData, units, focusDay, setFocusDay }) 
         <div className="px-4 lg:px-8 pb-4 lg:pb-8 flex overflow-x-auto">
           {weatherData.days
             .slice(0, 5)
-            // .filter(day => day !== weatherData.days.find(d => d.datetime === focusDay))
             .map(day => (
               <div
                 key={day.datetime}
@@ -325,7 +327,6 @@ export default function Forecast({ weatherData, units, focusDay, setFocusDay }) 
         <div className="px-4 lg:px-8 pb-4 lg:pb-8 flex overflow-x-auto">
           {weatherData.days
             .slice(5, 14)
-            // .filter(day => day !== weatherData.days.find(d => d.datetime === focusDay))
             .map((day, i) => (
               <div
                 key={day.datetime}

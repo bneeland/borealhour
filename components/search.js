@@ -1,39 +1,31 @@
-import { useState, useEffect, } from 'react'
-import Link from 'next/link'
-import axios from 'axios'
-import useSWR, { mutate } from 'swr'
+import { useState, } from 'react'
 import { Combobox } from '@headlessui/react'
 
-export default function Search({ units, onSelectLocation }) {
-  const [autocompleteLocation, setAutocompleteLocation] = useState('')
-  const [weatherData, setWeatherData] = useState('')
-  const [selectedLocation, setSelectedLocation] = useState('')
-
-  function getWeatherData(_query) {
-    return axios({
-      method: 'get',
-      url: `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${_query}?unitGroup=${units}&key=${process.env.NEXT_PUBLIC_VISUAL_CROSSING_API_KEY}&contentType=json`,
-    })
-      .then(response => response.data)
-      .catch(error => error.response.data)
-  }
-
-  useEffect(() => {
-    swrHandler()
-  }, [units])
+export default function Search({
+  units,
+  getWeatherData,
+  autocompleteLocation,
+  setAutocompleteLocation,
+  setWeatherData,
+  selectedLocation,
+  setSelectedLocation,
+  setFocusDay,
+}) {
+  const [searchWeatherData, setSearchWeatherData] = useState()
 
   function locationInputHandler(e) {
     const _query = e.target.value
 
     if (_query.length >= 3) {
-      getWeatherData(_query).then(data => {
-        if (data) {
-          setAutocompleteLocation([data.resolvedAddress])
-          setWeatherData(data)
-        } else {
-          setAutocompleteLocation('')
-        }
-      })
+      getWeatherData(_query)
+        .then(data => {
+          if (data) {
+            setAutocompleteLocation([data.resolvedAddress])
+            setSearchWeatherData(data)
+          } else {
+            setAutocompleteLocation('')
+          }
+        })
     } else {
       setAutocompleteLocation('')
     }
@@ -41,38 +33,19 @@ export default function Search({ units, onSelectLocation }) {
 
   function locationSelectionHandler(e) {
     setSelectedLocation(e)
-
-    onSelectLocation(weatherData)
+    setWeatherData(searchWeatherData)
+    setFocusDay(searchWeatherData.days[0].datetime)
 
     // Set selected location in local storage
     localStorage.setItem('selectedLocation', e)
   }
 
-  function swrHandler(_message) {
-    const _selectedLocation = localStorage.getItem('selectedLocation')
-
-    if (_selectedLocation) {
-      getWeatherData(_selectedLocation).then(data => {
-        if (data) {
-          setAutocompleteLocation([data.resolvedAddress])
-          setWeatherData(data)
-          onSelectLocation(data)
-        }
-      })
-
-      setSelectedLocation(_selectedLocation)
-    }
-  }
-
-  useSWR('Get weather data on page load or focus', swrHandler)
-
   return (
     <div className="w-full">
-
       <Combobox value={selectedLocation} onChange={e => locationSelectionHandler(e)}>
         <Combobox.Input
           onChange={locationInputHandler}
-          autoComplete="on"
+          autoComplete="off"
           className="w-full px-2 py-1 bg-stone-100 shadow-inner border border-stone-100 rounded transition-all font-light"
           placeholder="Search for a location"
         />
@@ -89,7 +62,6 @@ export default function Search({ units, onSelectLocation }) {
           ))}
         </Combobox.Options>
       </Combobox>
-
     </div>
   )
 }
