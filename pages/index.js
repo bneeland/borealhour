@@ -111,13 +111,9 @@ export default function Home() {
       </div>
 
       {selectedLocation ? (
-        <div>
           <Forecast weatherData={weatherData} units={units} focusDay={focusDay} setFocusDay={focusDay => setFocusDay(focusDay)} />
-        </div>
       ) : (
-        <div>
           <Splash />
-        </div>
       )}
     </div>
   )

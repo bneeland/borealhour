@@ -5,6 +5,7 @@ import { WiSnow, WiRain, WiFog, WiWindy, WiCloudy, WiDayCloudy, WiNightCloudy, W
 import WeatherIcon from '../components/weatherIcon'
 import { HiChevronLeft, HiChevronRight, } from 'react-icons/hi'
 import { MajorHeading, MinorHeading, DataLabel, DataValue, DataArray, } from './typography'
+import Loading from '../components/loading'
 
 const weekdays = {
   1: 'Monday',
@@ -48,7 +49,7 @@ function convertTime(inputDate) {
 
 export default function Forecast({ weatherData, units, focusDay, setFocusDay }) {
   if (!weatherData) {
-    return <>Loading&hellip;</>
+    return <Loading />
   }
 
   return (
@@ -234,7 +235,7 @@ export default function Forecast({ weatherData, units, focusDay, setFocusDay }) 
             <MajorHeading content="Forecast" /><DataLabel content="(short-term)" />
           </div>
         </div>
-        <div className="px-4 lg:px-8 pb-4 lg:pb-8 flex overflow-x-auto">
+        <div className="px-4 lg:px-8 flex overflow-x-auto">
           {weatherData.days
             .slice(0, 5)
             .map(day => (
