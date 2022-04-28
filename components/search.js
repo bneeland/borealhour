@@ -34,7 +34,8 @@ export default function Search({
   function locationSelectionHandler(e) {
     setSelectedLocation(e)
     setWeatherData(searchWeatherData)
-    setFocusDay(searchWeatherData.days[0].datetime)
+    const currentDate = new Date().toLocaleString('sv', { timeZone: searchWeatherData.timezone }).split(' ')[0]
+    setFocusDay(currentDate)
 
     // Set selected location in local storage
     localStorage.setItem('selectedLocation', e)

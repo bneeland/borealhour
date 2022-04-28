@@ -31,11 +31,19 @@ export default function Home() {
     if (_selectedLocation) {
       getWeatherData(_selectedLocation).then(data => {
         if (data) {
+          // Only set the focus day if it's not currently set
+          // of if it's set but it's earlier than current date based on selected location's timezone
+          const currentDate = new Date().toLocaleString('sv', { timeZone: data.timezone }).split(' ')[0]
+          if (!focusDay) {
+            setFocusDay(currentDate)
+          } else {
+            if (focusDay < currentDate) {
+              setFocusDay(currentDate)
+            }
+          }
+
           setAutocompleteLocation([data.resolvedAddress])
           setWeatherData(data)
-          if (!focusDay) {
-            setFocusDay(data.days[0].datetime)
-          }
         }
       })
       setSelectedLocation(_selectedLocation)
