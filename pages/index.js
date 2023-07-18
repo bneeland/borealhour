@@ -19,7 +19,7 @@ export default function Home() {
   function getWeatherData(_query) {
     return axios({
       method: 'get',
-      url: `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${_query}?unitGroup=${units}&key=${process.env.NEXT_PUBLIC_VISUAL_CROSSING_API_KEY_ALT}&contentType=json`,
+      url: `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${_query}?unitGroup=${units}&key=${process.env.NEXT_PUBLIC_VISUAL_CROSSING_API_KEY}&contentType=json`,
     })
       .then(response => response.data)
       .catch(error => error.response.data)
@@ -119,15 +119,15 @@ export default function Home() {
       </div>
 
       {selectedLocation ? (
-          <Forecast
-            weatherData={weatherData}
-            units={units}
-            focusDay={focusDay}
-            setFocusDay={focusDay => setFocusDay(focusDay)}
-            selectedLocation={selectedLocation}
-          />
+        <Forecast
+          weatherData={weatherData}
+          units={units}
+          focusDay={focusDay}
+          setFocusDay={focusDay => setFocusDay(focusDay)}
+          selectedLocation={selectedLocation}
+        />
       ) : (
-          <Splash />
+        <Splash />
       )}
     </div>
   )

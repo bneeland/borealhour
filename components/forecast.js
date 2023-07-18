@@ -70,7 +70,7 @@ export default function Forecast({
       {/* Current */}
       <div className="p-8 lg:p-12">
         <div className="flex space-x-2">
-          <MajorHeading content="Current" /><DataLabel content="·" /><DataLabel content={`${convertTime(weatherData.currentConditions.datetime)}`} title="Time of the latest available data" />
+          <MajorHeading content="Current" /><DataLabel content="·" /><DataLabel content={`as of ${convertTime(weatherData.currentConditions.datetime)}`} title="Time of the latest available data" />
         </div>
         <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-2">
           <div className="flex-1 sm:flex-none flex items-center justify-center">
@@ -88,21 +88,12 @@ export default function Forecast({
             <div className="w-full">
               <div className="flex">
                 <div className="flex-1">
-                  <DataLabel content="Precipitation" />
-                </div>
-                <div className="">
-                  <DataValue content={weatherData.currentConditions.precipprob ? `${Math.round(weatherData.currentConditions.precipprob)}% probability` : `None`} />
-                  <DataValue content={weatherData.currentConditions.preciptype && ` ${weatherData.currentConditions.preciptype}`} />
-                </div>
-              </div>
-              <div className="flex">
-                <div className="flex-1">
                   <DataLabel content="Wind" />
                 </div>
                 <div className="">
                   <DataValue content={weatherData.currentConditions.windspeed && `${Math.round(weatherData.currentConditions.windspeed)} ${unitSymbols.speed[units]}`} />
-                  &nbsp;
-                  <DataValue content={weatherData.currentConditions.winddir && `${Math.round(weatherData.currentConditions.winddir)}°`} />
+                  {/* &nbsp;
+                  <DataValue content={weatherData.currentConditions.winddir && `${Math.round(weatherData.currentConditions.winddir)}°`} /> */}
                 </div>
               </div>
               <div className="flex">
@@ -300,7 +291,7 @@ export default function Forecast({
                   <MinorHeading content="Wind" />
                   <div className="space-x-4">
                     <DataValue content={Math.round(day.windspeed)} />
-                    <DataValue content={`${Math.round(day.winddir)}°`} />
+                    {/* <DataValue content={`${Math.round(day.winddir)}°`} /> */}
                   </div>
                   <ResponsiveContainer width="95%" height={50} className="mx-auto">
                     <AreaChart data={weatherData.days.find(d => d === day).hours}>
